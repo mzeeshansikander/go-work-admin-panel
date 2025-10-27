@@ -21,7 +21,15 @@ const LayoutView = ({ children }: { children: React.ReactNode }) => {
             onClick={() => setIsOpen(!isOpen)}
           />
         </div>
-        <div className="py-6 h-[94.5dvh] overflow-auto w-full">{children}</div>
+        <div className="py-6 h-[94.5dvh] overflow-auto w-full">
+          {" "}
+          {/* Common Header */}
+          <div className="flex flex-col w-full gap-5 md:px-10 px-5">
+            <p className="text-black font-semibold text-[32px]">Welcome!</p>
+            <hr className="w-full text-black " />
+          </div>
+          {children}
+        </div>
       </div>
     </div>
   );

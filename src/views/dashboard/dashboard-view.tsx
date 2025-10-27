@@ -11,12 +11,6 @@ import AverageRatingsChart from "@/components/dashboard/ratings-donut-chart";
 const DashboardView = () => {
   return (
     <div className="w-full md:px-10 px-5">
-      {/* Common Header */}
-      <div className="flex flex-col w-full gap-5">
-        <p className="text-black font-semibold text-[32px]">Welcome!</p>
-        <hr className="w-full text-black " />
-      </div>
-
       <div className="w-full grid md:grid-cols-3 grid-cols-1 gap-5 mt-5">
         <div className="rounded-xl bg-[#0071BC0D] py-15 pl-10">
           <div className="flex gap-x-3">
