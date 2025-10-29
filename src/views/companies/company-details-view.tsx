@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import backButton from "../../../public/assets/icons/back-arrow.png";
-import CompanyDetails from "@/components/company/company-details";
+import CompanyDetails from "@/components/companies/company-details";
 import TeamCrewTable from "@/components/companies/team-crew-table";
 
 const CompanyDetailsView = () => {
