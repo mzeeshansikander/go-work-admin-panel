@@ -1,9 +1,7 @@
 import Button from "@/components/ui/button";
 import PasswordInput from "@/components/ui/password-input";
-import { useRouter } from "next/navigation";
 
 const ResetPasswordView = () => {
-  const router = useRouter();
   return (
     <div className="h-full flex flex-col justify-center items-center border-2 px-16 ">
       <div className="w-full flex flex-col justify-start mt-3 ml-3 lg:ml-10">

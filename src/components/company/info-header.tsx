@@ -14,7 +14,6 @@ const InfoHeaderComponent: FC<Props> = ({
   name = "Company Name",
   rating = "0.0",
   reviewCount = 0,
-  profilePicture,
 }) => {
   return (
     <div className="flex flex-row justify-between items-center">

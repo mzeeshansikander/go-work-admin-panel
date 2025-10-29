@@ -24,7 +24,6 @@ const InitialInfoComponent: FC<UserProfile> = ({
   uniformSize = "",
   shoesSize = 0,
   gender = "",
-  email = "",
 }) => {
   return (
     <div className="flex flex-wrap my-5 gap-y-8">

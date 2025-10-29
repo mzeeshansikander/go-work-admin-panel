@@ -8,21 +8,12 @@ interface OtpTimerProps {
   onResend?: () => void;
 }
 
-const OtpTimer: React.FC<OtpTimerProps> = ({
-  email = "",
-  initialTime = 30,
-  onResend,
-}) => {
+const OtpTimer: React.FC<OtpTimerProps> = ({ initialTime = 30, onResend }) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(true);
   const [isResending, setIsResending] = useState(false);
 
   useEffect(() => {
-    if (!isRunning || timeLeft <= 0) {
-      setIsRunning(false);
-      return;
-    }
-
     const timer = setInterval(() => {
       setTimeLeft((prev) => prev - 1);
     }, 1000);
@@ -33,19 +24,13 @@ const OtpTimer: React.FC<OtpTimerProps> = ({
   const handleResend = async () => {
     setIsResending(true);
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setTimeLeft(initialTime);
-      setIsRunning(true);
-      toast.success("Code resent successfully!");
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setTimeLeft(initialTime);
+    setIsRunning(true);
+    toast.success("Code resent successfully!");
 
-      if (onResend) {
-        onResend();
-      }
-    } catch (error) {
-      toast.error("Failed to resend code. Please try again.");
-    } finally {
-      setIsResending(false);
+    if (onResend) {
+      onResend();
     }
   };
 

@@ -36,7 +36,8 @@ const TableFoot = ({
   }, [rowsPerPage]);
 
   const closeDropdown = (e: MouseEvent) => {
-    let target = e.target as HTMLElement;
+    let target: HTMLElement | null = e.target as HTMLElement;
+
     while (target) {
       if (
         target.id === "dropdownCardsButton" ||
@@ -46,6 +47,7 @@ const TableFoot = ({
       }
       target = target.parentElement;
     }
+
     setDropdown(false);
   };
 

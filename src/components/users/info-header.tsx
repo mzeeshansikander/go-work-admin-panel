@@ -15,7 +15,6 @@ const InfoHeaderComponent: FC<Props> = ({
   fullName = "",
   rating = 0,
   reviewCount = 0,
-  profilePicture = "",
 }) => {
   return (
     <div className="flex md:flex-row flex-col gap-y-8 md:justify-between md:items-center">

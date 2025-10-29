@@ -6,7 +6,6 @@ import reviewer1 from "../../../public/assets/icons/man.svg";
 import reviewer2 from "../../../public/assets/icons/man.svg";
 
 interface ReviewItem {
-  ratings: {};
   reviewerProfile?: string | StaticImageData;
   reviewerName?: string;
   stars?: number;
