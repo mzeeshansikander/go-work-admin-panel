@@ -39,3 +39,20 @@ export interface PasswordResetResponse {
 }
 
 export type PasswordResetApiResponse = [PasswordResetResponse | null];
+
+export interface DashboardCardsData {
+  totalCandidates: number;
+  totalCompanies: number;
+  totalEvents: number;
+}
+
+export interface EventsData {
+  ongoingEventsCount: number;
+  pastEventsCount: number;
+}
+
+export interface RatingData {
+  averageRating: number;
+}
+
+export type SubscribedCompaniesData = [{ date: string; count: number }];

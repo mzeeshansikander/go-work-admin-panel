@@ -19,4 +19,17 @@ export const URL = {
 
     resetPassword: `${BASE_URL}/auth/reset-password`,
   },
+
+  dashboard: {
+    cardsData: `${BASE_URL}/admin/dashboard/cards-data`,
+
+    eventsData: (filterBy: string) =>
+      `${BASE_URL}/admin/dashboard/events-by-status-data?filterBy=${filterBy}`,
+
+    ratingData: (filterBy: string) =>
+      `${BASE_URL}/admin/dashboard/average-ratings-data?filterBy=${filterBy}`,
+
+    companiesData: (filterBy: string) =>
+      `${BASE_URL}/admin/dashboard/subscribed-companies-data?filterBy=${filterBy}`,
+  },
 };

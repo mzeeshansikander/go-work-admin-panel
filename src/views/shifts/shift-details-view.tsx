@@ -76,7 +76,6 @@ const ShiftDetailsView = () => {
                 <Tabs value={tab} onValueChange={setTab}>
                   <div className="inline-flex items-center gap-6 pb-1">
                     <button
-                      // eslint-disable-next-line react-hooks/rules-of-hooks
                       onClick={() => setTab("pending")}
                       className={`text-sm cursor-pointer font-medium transition-colors pb-2 ${
                         tab === "pending"
@@ -88,7 +87,6 @@ const ShiftDetailsView = () => {
                     </button>
 
                     <button
-                      // eslint-disable-next-line react-hooks/rules-of-hooks
                       onClick={() => setTab("pending_contracts")}
                       className={`text-sm cursor-pointer font-medium transition-colors pb-2 ${
                         tab === "pending_contracts"
@@ -100,7 +98,6 @@ const ShiftDetailsView = () => {
                     </button>
 
                     <button
-                      // eslint-disable-next-line react-hooks/rules-of-hooks
                       onClick={() => setTab("approved")}
                       className={`text-sm cursor-pointer font-medium transition-colors pb-2 ${
                         tab === "approved"
