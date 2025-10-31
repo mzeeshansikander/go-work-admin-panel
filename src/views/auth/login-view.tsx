@@ -1,12 +1,42 @@
 "use client";
+import LoadingSpinner from "@/components/common/loading-spinner.component";
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import PasswordInput from "@/components/ui/password-input";
+import { loginSchema } from "@/schema/auth-schema";
+import { useLoginMutation } from "@/services/react-query/auth/login";
+import { LoginApiResponse } from "@/types/response";
+import { setCookie } from "cookies-next";
+import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import React from "react";
+import toast from "react-hot-toast";
 
 const LoginView = () => {
   const router = useRouter();
+  const { mutate: login, isPending } = useLoginMutation();
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      login(values, {
+        onSuccess: (data) => {
+          const res = data as LoginApiResponse;
+          if (res[0] !== null) {
+            router.push("/dashboard");
+            setCookie("accessToken", res?.[0]?.token);
+            toast.success("Login SUccessful.");
+          } else {
+            toast.error("Invalid credentials.");
+          }
+        },
+      });
+    },
+  });
+
   return (
     <div className="h-full flex flex-col justify-center items-center">
       <div className="w-full flex flex-col justify-start">
@@ -14,14 +44,21 @@ const LoginView = () => {
           Login
         </h1>
       </div>
-      <form className="flex flex-col gap-y-3 w-full mt-5 lg:ml-[200px] ml-20">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="flex flex-col gap-y-3 w-full mt-5 lg:ml-[200px] ml-20"
+      >
         <Input
           type="email"
           label="Email"
           name="email"
           placeholder="e.g alexjohn@example.com"
           required={true}
-          className="lg:w-[75%] w-[80%] h-[42px] px-3 py-2 "
+          className="lg:w-[75%] w-[80%] h-[42px] px-3 py-2"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.email ? formik.errors.email : undefined}
         />
         <PasswordInput
           type="password"
@@ -29,7 +66,11 @@ const LoginView = () => {
           name="password"
           placeholder="Enter your password"
           required={true}
-          className="lg:w-[75%] w-[80%] h-[42px] px-1 py-2 "
+          className="lg:w-[75%] w-[80%] h-[42px] px-1 py-2"
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.password ? formik.errors.password : undefined}
         />
         <div className="lg:w-[75%] w-[80%] flex justify-end">
           <p
@@ -44,8 +85,9 @@ const LoginView = () => {
         <div className="lg:w-[75%] w-[80%]">
           <Button
             type="submit"
-            text={"Login"}
-            className="rounded-lg bg-primary p-2 mt-2 text-[15px] w-full h-[45px] text-white"
+            text={isPending ? <LoadingSpinner size={20} /> : "Login"}
+            disabled={isPending}
+            className="rounded-lg bg-primary p-2 mt-2 text-[15px] w-full h-[45px] text-white disabled:opacity-50 cursor-pointer"
           />
         </div>
       </form>

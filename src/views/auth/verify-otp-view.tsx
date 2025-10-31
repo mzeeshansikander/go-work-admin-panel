@@ -1,4 +1,5 @@
-import OtpTimer from "@/components/common/otp-timer.component";
+"use client";
+import { useForgotPassword } from "@/context/forgot-password-context";
 import Button from "@/components/ui/button";
 import {
   InputOTP,
@@ -7,97 +8,125 @@ import {
 } from "@/components/ui/input-otp";
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import Image from "next/image";
-import React, { useState } from "react";
+import { Formik, Form } from "formik";
+import OtpTimer from "@/components/common/otp-timer.component";
 import backButton from "../../../public/assets/icons/back-arrow.png";
+import { useVerifyOtpMutation } from "@/services/react-query/auth/verify-otp";
+import { useForgotPasswordMutation } from "@/services/react-query/auth/forgot-password";
+import { verifyOtpSchema } from "@/schema/auth-schema";
+import LoadingSpinner from "@/components/common/loading-spinner.component";
+import { VerifyOtpApiResponse } from "@/types/response";
+import toast from "react-hot-toast";
 
-interface VerifyOtpViewProps {
+interface Props {
   onNext: () => void;
   onBack: () => void;
 }
 
-const VerifyOtpView: React.FC<VerifyOtpViewProps> = ({ onNext, onBack }) => {
-  const [otp, setOtp] = useState("");
+const VerifyOtpView: React.FC<Props> = ({ onNext, onBack }) => {
+  const { email, otp, setOtp } = useForgotPassword();
+  const verifyMut = useVerifyOtpMutation();
+  const resendMut = useForgotPasswordMutation();
 
   return (
     <div className="h-full w-full flex flex-col justify-center px-6 sm:px-12 md:px-16 lg:px-20">
-      {/* Back Button */}
       <div className="w-full flex justify-start mb-8">
         <Image
           src={backButton}
-          alt="Back Button"
+          alt="Back"
           className="w-8 h-8 sm:w-10 sm:h-10 cursor-pointer"
           onClick={onBack}
         />
       </div>
 
-      {/* Header */}
       <div className="w-full flex flex-col justify-start mb-8">
         <h1 className="font-semibold text-2xl sm:text-3xl lg:text-[32px] mb-2">
           Verification Code
         </h1>
         <p className="text-grey-80 text-sm sm:text-base">
-          Enter the code sent to abc@gmail.com
+          Enter the code sent to {email}
         </p>
       </div>
 
-      {/* OTP Input Section */}
-      <div className="w-full">
-        <div className="w-full mb-6">
-          <InputOTP
-            maxLength={6}
-            pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
-            name="otp"
-            value={otp}
-            onChange={(newValue) => {
-              if (/^\d*$/.test(newValue)) {
-                setOtp(newValue);
-              }
-            }}
-          >
-            <InputOTPGroup className="flex justify-start items-center gap-2 sm:gap-3">
-              <InputOTPSlot
-                index={0}
-                className="bg-grey-10 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
-              />
-              <InputOTPSlot
-                index={1}
-                className="bg-grey-10 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
-              />
-              <InputOTPSlot
-                index={2}
-                className="bg-grey-10 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
-              />
-              <InputOTPSlot
-                index={3}
-                className="bg-grey-10 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
-              />
-              <InputOTPSlot
-                index={4}
-                className="bg-grey-10 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
-              />
-              <InputOTPSlot
-                index={5}
-                className="bg-grey-10 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
-              />
-            </InputOTPGroup>
-          </InputOTP>
-        </div>
+      <Formik
+        initialValues={{ otp: otp }}
+        validationSchema={verifyOtpSchema}
+        enableReinitialize
+        onSubmit={({ otp }, { setSubmitting }) => {
+          verifyMut.mutate(
+            { email, code: otp },
+            {
+              onSuccess: (data) => {
+                const res = data as VerifyOtpApiResponse;
+                if (res?.[0] !== null) {
+                  setOtp(otp);
+                  onNext();
+                  toast.success("Otp verified succesfully");
+                } else {
+                  toast.error("Otp verification failed");
+                }
+              },
+              onSettled: () => setSubmitting(false),
+            }
+          );
+        }}
+      >
+        {({ values, setFieldValue, errors, touched, isSubmitting }) => (
+          <Form className="w-full">
+            <div className="w-full mb-6">
+              <InputOTP
+                maxLength={6}
+                pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+                value={values.otp}
+                onChange={(v) => {
+                  if (/^\d*$/.test(v)) {
+                    setFieldValue("otp", v);
+                  }
+                }}
+              >
+                <InputOTPGroup className="flex justify-start items-center gap-2 sm:gap-3">
+                  {[0, 1, 2, 3, 4, 5].map((i) => (
+                    <InputOTPSlot
+                      key={i}
+                      index={i}
+                      className="bg-grey-10 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16"
+                    />
+                  ))}
+                </InputOTPGroup>
+              </InputOTP>
+              {touched.otp && errors.otp && (
+                <p className="text-red-600 text-sm mt-1">{errors.otp}</p>
+              )}
+            </div>
 
-        {/* Continue Button */}
-        <div className="w-full mb-6">
-          <Button
-            onClick={onNext}
-            text="Continue"
-            type="submit"
-            className="w-full sm:w-[70%] md:w-[50%] lg:w-[55%] py-3 sm:py-4 text-sm sm:text-base"
-          />
-        </div>
+            <div className="w-full mb-6">
+              <Button
+                type="submit"
+                disabled={isSubmitting || verifyMut.isPending}
+                text={
+                  isSubmitting || verifyMut.isPending ? (
+                    <LoadingSpinner size={20} />
+                  ) : (
+                    "Continue"
+                  )
+                }
+                className="w-full sm:w-[70%] md:w-[50%] lg:w-[55%] py-3 sm:py-4 text-sm sm:text-base cursor-pointer"
+              />
+            </div>
 
-        {/* OTP Timer */}
-        <div className="w-full lg:ml-30 ml-10">
-          <OtpTimer email="abc@gmail.com" initialTime={30} />
-        </div>
-      </div>
+            <div className="w-full flex justify-center">
+              <OtpTimer
+                email={email}
+                initialTime={30}
+                onResend={() => {
+                  resendMut.mutate({ email });
+                }}
+                disabled={resendMut.isPending}
+              />
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

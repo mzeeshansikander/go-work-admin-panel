@@ -1,73 +1,44 @@
-import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+"use client";
+import { useEffect, useState } from "react";
 
-interface OtpTimerProps {
-  email?: string;
-  initialTime?: number;
-  onResend?: () => void;
+interface Props {
+  email: string;
+  initialTime: number;
+  onResend: () => void;
+  disabled?: boolean;
 }
 
-const OtpTimer: React.FC<OtpTimerProps> = ({ initialTime = 30, onResend }) => {
-  const [timeLeft, setTimeLeft] = useState(initialTime);
-  const [isRunning, setIsRunning] = useState(true);
-  const [isResending, setIsResending] = useState(false);
+const OtpTimer: React.FC<Props> = ({ initialTime, onResend, disabled }) => {
+  const [seconds, setSeconds] = useState(initialTime);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
+    if (seconds === 0) return;
+    const id = setInterval(() => setSeconds((s) => s - 1), 1000);
+    return () => clearInterval(id);
+  }, [seconds]);
 
-    return () => clearInterval(timer);
-  }, [isRunning, timeLeft]);
-
-  const handleResend = async () => {
-    setIsResending(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setTimeLeft(initialTime);
-    setIsRunning(true);
-    toast.success("Code resent successfully!");
-
-    if (onResend) {
-      onResend();
-    }
+  const resend = () => {
+    setSeconds(initialTime);
+    onResend();
   };
 
   return (
-    <div className="flex flex-col items-start gap-3">
-      <div className="text-sm sm:text-base font-normal text-grey-80">
-        Remaining Time:{" "}
-        <span className="text-primary font-medium">
-          00 : {timeLeft < 10 ? `0${timeLeft}` : timeLeft}
-        </span>
-      </div>
-      <div>
-        <div className="text-sm sm:text-base font-medium text-grey-80">
-          Didn&apos;t receive code?{" "}
-          <span
-            role="button"
-            tabIndex={timeLeft > 0 || isResending ? -1 : 0}
-            onClick={timeLeft > 0 || isResending ? undefined : handleResend}
-            className={cn(
-              "text-sm sm:text-base font-semibold text-primary cursor-pointer",
-              timeLeft > 0 || isResending ? "opacity-70 cursor-not-allowed" : ""
-            )}
-            onKeyDown={(e) => {
-              if (
-                timeLeft === 0 &&
-                !isResending &&
-                (e.key === "Enter" || e.key === " ")
-              ) {
-                handleResend();
-              }
-            }}
-            aria-disabled={timeLeft > 0 || isResending}
-          >
-            {isResending ? "Resending..." : "Resend"}
-          </span>
-        </div>
-      </div>
+    <div className="flex md:-ml-[360px] gap-2 text-sm">
+      {seconds > 0 ? (
+        <>
+          <span className="cursor-pointer">Resend code in</span>
+          <span className="font-medium">{seconds}s</span>
+        </>
+      ) : (
+        <button
+          type="button"
+          onClick={resend}
+          disabled={disabled}
+          className="text-primary underline disabled:opacity-50 cursor-pointer"
+        >
+          Resend
+        </button>
+      )}
     </div>
   );
 };
