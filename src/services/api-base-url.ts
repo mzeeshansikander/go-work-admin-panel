@@ -32,4 +32,33 @@ export const URL = {
     companiesData: (filterBy: string) =>
       `${BASE_URL}/admin/dashboard/subscribed-companies-data?filterBy=${filterBy}`,
   },
+
+  strikes: {
+    getStrikes: (
+      skip?: number,
+      take?: number,
+      status?: string,
+      search?: string,
+      userId?: string
+    ) => {
+      const params = new URLSearchParams();
+
+      if (search) params.append("search", search);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+      if (status) params.append("status", status.toString());
+      if (userId) params.append("userId", userId.toString());
+
+      return `${BASE_URL}/admin/strikes?${params.toString()}`;
+    },
+
+    acceptRejectStrike: (id: string, type: string) => {
+      const params = new URLSearchParams();
+
+      if (type) params.append("type", type);
+      return `${BASE_URL}/admin/strikes/${id}?${params.toString()}`;
+    },
+  },
 };

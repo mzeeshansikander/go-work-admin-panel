@@ -56,3 +56,28 @@ export interface RatingData {
 }
 
 export type SubscribedCompaniesData = [{ date: string; count: number }];
+
+export interface Strike {
+  id: string;
+  reason: string;
+  date: string;
+  companyName: string;
+  userName: string;
+  userId: string;
+  isApproved: string;
+  companyLogo: string;
+  userProfile: string;
+}
+
+export interface StrikesData {
+  strikes: Strike[];
+  meta: {
+    skip: number;
+    take: number;
+    total: number;
+  };
+}
+
+export type StrikesResponse = [StrikesData | null];
+
+export type AcceptRejectResponse = [{ success: boolean } | null];

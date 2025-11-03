@@ -1,18 +1,63 @@
 "use client";
-import React from "react";
-import strikeIcon from "../../../public/assets/icons/strike_icon.png";
-import Image from "next/image";
-import company from "../../../public/assets/icons/company-logo.svg";
-import user from "../../../public/assets/icons/man.svg";
-import redStrike from "../../../public/assets/icons/red-strike-icon.svg";
-import whiteStrike from "../../../public/assets/icons/white-strike-icon.svg";
+import LoaderOverlay from "@/components/common/page-loader.component";
 import Button from "@/components/ui/button";
+import { useGetStrikes } from "@/services/react-query/strikes/get-all-strikes";
+import { Strike } from "@/types/response";
+import Image from "next/image";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import backButton from "../../../public/assets/icons/back-arrow.png";
+import redStrike from "../../../public/assets/icons/red-strike-icon.svg";
+import strikeIcon from "../../../public/assets/icons/strike_icon.png";
+import whiteStrike from "../../../public/assets/icons/white-strike-icon.svg";
+import { useAcceptRejectStrike } from "@/services/react-query/strikes/accept-reject-strike";
+import LoadingSpinner from "@/components/common/loading-spinner.component";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const StrikeDetailsView = () => {
+  const params = useParams();
+  const id = params.id as string;
+  const status = useSearchParams().get("status");
+  const router = useRouter();
+  const query = useQueryClient();
+
+  const [strikeId, setStrikeId] = useState<string>("");
+
+  const { data, isPending } = useGetStrikes(
+    undefined,
+    undefined,
+    status?.toString(),
+    undefined,
+    id
+  );
+
+  const strikes = data?.[0]?.strikes;
+
+  const strikeCount = data?.[0]?.meta?.total;
+
+  const { mutateAsync: acceptMutate, isPending: acceptPending } =
+    useAcceptRejectStrike(strikeId, "ACCEPT");
+  const { mutateAsync: rejectMutate, isPending: rejectPending } =
+    useAcceptRejectStrike(strikeId, "REJECT");
+
   return (
     <div className="w-full md:px-10 px-5">
-      <div className="flex flex-col w-full gap-5 my-5">
-        <p className="text-black font-semibold text-[32px]">Strike Details</p>
+      <div className="w-full flex justify-between">
+        <div className="flex flex-row items-center gap-5 py-5">
+          <div
+            onClick={() => router.push("/strikes")}
+            className="cursor-pointer"
+          >
+            <Image
+              src={backButton}
+              alt="back"
+              width={34}
+              height={34}
+              className="w-[34px] h-[34px]"
+            />
+          </div>
+          <h1 className="text-[28px] font-semibold">Strike Details</h1>
+        </div>
       </div>
 
       <div className="w-full flex gap-x-3 px-6 py-6 bg-[#FCDBDB] text-ellipsis overflow-hidden wrap-break-word rounded-md">
@@ -26,44 +71,89 @@ const StrikeDetailsView = () => {
 
       {/* Strike Section */}
       <div className="w-full flex flex-col gap-y-6 mt-10">
-        <div className="flex gap-3 text-[#51595A] text-[15px] md:text-[18px]">
-          <Image src={company} alt="" className="w-8 h-8 rounded-full" />
-          <p className="mt-1"> Strike by Zenkoders to</p>
-          <Image src={user} alt="" className="w-8 h-8 rounded-full" />
-          <p className="mt-1">John Doe </p>
-          <div className="flex">
-            <Image src={whiteStrike} alt="" className="w-8 h-8" />
-            <Image src={whiteStrike} alt="" className="w-8 h-8" />
-            <Image src={redStrike} alt="" className="w-8 h-8" />
-          </div>
-          <p className="text-black">1/3</p>
-        </div>
+        {isPending ? (
+          <LoaderOverlay />
+        ) : (
+          strikes &&
+          strikes?.map((strike: Strike, index: number) => (
+            <div key={index} className="space-y-5">
+              <div className="flex md:flex-row flex-col justify-center md:justify-start items-center md:items-start  gap-3 text-[#51595A] text-[15px] md:text-[18px]">
+                <Image
+                  src={strike?.companyLogo}
+                  alt=""
+                  className="w-8 h-8 rounded-full"
+                  height={32}
+                  width={32}
+                />
+                <p className="mt-1"> Strike by {strike?.companyName} to</p>
+                <Image
+                  src={strike?.userProfile}
+                  alt=""
+                  className="w-8 h-8 rounded-full"
+                  height={32}
+                  width={32}
+                />
+                <p className="mt-1">{strike?.userName}</p>
+                <div className="flex gap-3">
+                  <div className="flex">
+                    {Array.from({ length: 3 }).map((_, index) => {
+                      const isRed = index >= 3 - strikeCount!;
+                      return (
+                        <Image
+                          key={index}
+                          src={isRed ? redStrike : whiteStrike}
+                          alt={isRed ? "Active strike" : "Inactive strike"}
+                          className="w-8 h-8"
+                        />
+                      );
+                    })}
+                  </div>
+                  <p className="text-black mt-0.5">{index + 1}/3</p>
+                </div>
+              </div>
 
-        <div className="w-full rounded-xl border p-10 flex flex-col gap-4 text-ellipsis overflow-hidden wrap-break-word">
-          <p className="font-semibold text-black text-[28px]">
-            Reason for Strike:
-          </p>
-          <p className="text-[#51595A] text-[16px]">
-            The user canceled their confirmed participation in a scheduled event
-            less than 24 hours before the shift start time without providing any
-            valid reason or prior notice. This caused a disruption in staffing,
-            increased operational pressure on the team, and risked the quality
-            of service delivered at the event. Due to the lack of accountability
-            and the operational impact caused, a strike has been issued in
-            accordance with our event reliability policy.
-          </p>
-        </div>
-      </div>
+              <div className="w-full rounded-xl border p-10 flex flex-col gap-4 text-ellipsis overflow-hidden wrap-break-word">
+                <p className="font-semibold text-black text-[28px]">
+                  Reason for Strike:
+                </p>
+                <p className="text-[#51595A] text-[16px]">{strike?.reason}</p>
+              </div>
 
-      <div className="w-full flex gap-x-3 justify-end mt-5">
-        <Button
-          text="Accept"
-          className="bg-primary min-w-fit min-h-fit rounded-md text-white py-2 px-8"
-        />
-        <Button
-          text="Reject"
-          className="bg-white border border-[#F14D4D] min-w-fit min-h-fit rounded-md text-[#F14D4D] py-2 px-8"
-        />
+              {!strike?.isApproved && (
+                <div className="w-full flex gap-x-3 justify-end mt-5">
+                  <Button
+                    onClick={() => {
+                      setStrikeId(strike.id);
+                      acceptMutate();
+                      query.invalidateQueries({ queryKey: ["all-strikes"] });
+                      router.push("strikes");
+                    }}
+                    text={
+                      acceptPending ? <LoadingSpinner size={20} /> : "Accept"
+                    }
+                    className="bg-primary min-w-fit min-h-fit rounded-md text-white py-2 px-8 cursor-pointer"
+                  />
+                  <Button
+                    onClick={() => {
+                      setStrikeId(strike.id);
+                      rejectMutate();
+                      query.invalidateQueries({ queryKey: ["all-strikes"] });
+                      router.push("strikes");
+                    }}
+                    text={
+                      rejectPending ? (
+                        <LoadingSpinner size={20} color="#F14D4D" />
+                      ) : (
+                        "Reject"
+                      )
+                    }
+                    className="bg-white border border-[#F14D4D] min-w-fit min-h-fit rounded-md text-[#F14D4D] py-2 px-8 cursor-pointer"
+                  />
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

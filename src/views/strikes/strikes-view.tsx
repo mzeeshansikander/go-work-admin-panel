@@ -1,10 +1,29 @@
 "use client";
 import StrikesTable from "@/components/strikes/strike-table";
 import Button from "@/components/ui/button";
-import React, { useState } from "react";
+import { useGetStrikes } from "@/services/react-query/strikes/get-all-strikes";
+import { StrikesData } from "@/types/response";
+import { useEffect, useState } from "react";
 
 const StrikesView = () => {
-  const [filter, setFitler] = useState<"pending" | "approved">("pending");
+  const [currentTab, setCurrentTab] = useState<"PENDING" | "APPROVED">(
+    "PENDING"
+  );
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCurrentPage(0);
+  }, [searchTerm]);
+
+  const { data, isPending } = useGetStrikes(
+    currentPage,
+    rowsPerPage,
+    currentTab,
+    searchTerm
+  );
 
   return (
     <div className="w-full md:px-10 px-5">
@@ -16,31 +35,41 @@ const StrikesView = () => {
       <div className="w-full flex gap-4">
         <Button
           onClick={() => {
-            setFitler("pending");
+            setCurrentTab("PENDING");
           }}
           text={"Pending"}
           className={`min-w-fit min-h-fit py-3 px-10 ${
-            filter === "pending"
+            currentTab === "PENDING"
               ? "bg-[#F14D4D] text-white"
               : "bg-white text-[#626D6F]"
-          } ${filter !== "pending" && "border"} cursor-pointer rounded-xl`}
+          } ${currentTab !== "PENDING" && "border"} cursor-pointer rounded-xl`}
         />
 
         <Button
           onClick={() => {
-            setFitler("approved");
+            setCurrentTab("APPROVED");
           }}
           text={"Approved"}
           className={`min-w-fit min-h-fit py-3 px-10 ${
-            filter === "approved"
+            currentTab === "APPROVED"
               ? "bg-primary text-white"
               : "bg-white text-[#626D6F]"
-          } ${filter !== "approved" && "border"} cursor-pointer rounded-xl`}
+          } ${currentTab !== "APPROVED" && "border"} cursor-pointer rounded-xl`}
         />
       </div>
 
       {/* Strikes Table */}
-      <StrikesTable />
+      <StrikesTable
+        data={data?.[0] as StrikesData}
+        tab={currentTab}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        isPending={isPending}
+      />
     </div>
   );
 };

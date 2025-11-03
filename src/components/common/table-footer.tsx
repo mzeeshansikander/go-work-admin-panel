@@ -1,9 +1,5 @@
 "use client";
-
-// React
 import React, { useEffect, useState } from "react";
-
-// Icons
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 export interface TableFootI {
@@ -30,9 +26,7 @@ const TableFoot = ({
   };
 
   useEffect(() => {
-    // eslint-disable-next-line  @typescript-eslint/no-unused-expressions
-    setCurrentPage && setCurrentPage(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCurrentPage && setCurrentPage(0);
   }, [rowsPerPage]);
 
   const closeDropdown = (e: MouseEvent) => {
@@ -51,21 +45,19 @@ const TableFoot = ({
     setDropdown(false);
   };
 
-  function getPageSequence(
+  const getPageSequence = (
     totalItems: number,
     currentPage: number,
     rowsPerPage: number
-  ) {
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    const endIndex = Math.min((currentPage - 1) * rowsPerPage, totalItems);
+  ): [number, number] => {
+    const start = currentPage * rowsPerPage;
+    const end = Math.min(start + rowsPerPage, totalItems);
 
-    let endIndex2 = endIndex + rowsPerPage;
-    if (endIndex2 > (total ?? 100)) {
-      endIndex2 = total ?? 100;
-    }
+    const displayStart = totalItems === 0 ? 0 : start + 1;
+    const displayEnd = totalItems === 0 ? 0 : end;
 
-    return [startIndex + 1, endIndex2];
-  }
+    return [displayStart, displayEnd];
+  };
 
   useEffect(() => {
     document.body.addEventListener("click", closeDropdown);
@@ -74,14 +66,13 @@ const TableFoot = ({
     };
   });
 
-  const disableSate = () => {
-    if (
-      getPageSequence(total || 100, currentPage || 0, rowsPerPage || 5)[1] ===
-      total
-    ) {
-      return true;
-    }
-    return false;
+  const disableNext = () => {
+    if (!total || !rowsPerPage || currentPage === undefined) return true;
+    return (currentPage + 1) * rowsPerPage >= total;
+  };
+
+  const disablePrev = () => {
+    return currentPage === 0;
   };
 
   return (
@@ -93,12 +84,12 @@ const TableFoot = ({
         <div className="relative">
           <button
             id="dropdownCardsButton"
-            className="flex items-center justify-center focus:ring-1 focus:outline-none focus:ring-gray-300 px-3 rounded-sm text-text-primary text-xs font-medium sm:text-sm"
+            className="flex items-center justify-center cursor-pointer focus:ring-1 focus:outline-none focus:ring-gray-300 px-3 rounded-sm text-text-primary text-xs font-medium sm:text-sm"
             onClick={handleClick}
           >
             {rowsPerPage}
             <svg
-              className="w-2.5 h-2.5 ms-3"
+              className="w-2.5 h-2.5 ms-3 cursor-pointer"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -152,25 +143,33 @@ const TableFoot = ({
       <div className="flex gap-x-2">
         <button
           onClick={() => {
-            if (setCurrentPage) setCurrentPage((prev) => prev - 1);
+            if (
+              setCurrentPage &&
+              currentPage !== undefined &&
+              currentPage > 0
+            ) {
+              setCurrentPage(currentPage - 1);
+            }
           }}
-          disabled={currentPage === 1}
+          disabled={disablePrev()}
         >
           <BiChevronLeft
             className={`${
-              currentPage === 1 ? "text-gray-300" : "text-text-primary"
+              disablePrev() ? "text-gray-300" : "text-text-primary"
             } cursor-pointer text-xl font-medium sm:text-2xl`}
           />
         </button>
         <button
-          disabled={disableSate()}
+          disabled={disableNext()}
           onClick={() => {
-            if (setCurrentPage) setCurrentPage((prev) => prev + 1);
+            if (setCurrentPage && currentPage !== undefined) {
+              setCurrentPage(currentPage + 1);
+            }
           }}
         >
           <BiChevronRight
             className={`${
-              disableSate() ? "text-gray-300" : "text-text-primary"
+              disableNext() ? "text-gray-300" : "text-text-primary"
             } cursor-pointer text-xl font-medium sm:text-2xl`}
           />
         </button>
