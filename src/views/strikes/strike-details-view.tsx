@@ -1,18 +1,19 @@
 "use client";
+import LoadingSpinner from "@/components/common/loading-spinner.component";
 import LoaderOverlay from "@/components/common/page-loader.component";
+import AcceptStrikeModal from "@/components/strikes/accept-strike-modal";
 import Button from "@/components/ui/button";
+import { useAcceptRejectStrike } from "@/services/react-query/strikes/accept-reject-strike";
 import { useGetStrikes } from "@/services/react-query/strikes/get-all-strikes";
 import { Strike } from "@/types/response";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import backButton from "../../../public/assets/icons/back-arrow.png";
 import redStrike from "../../../public/assets/icons/red-strike-icon.svg";
 import strikeIcon from "../../../public/assets/icons/strike_icon.png";
 import whiteStrike from "../../../public/assets/icons/white-strike-icon.svg";
-import { useAcceptRejectStrike } from "@/services/react-query/strikes/accept-reject-strike";
-import LoadingSpinner from "@/components/common/loading-spinner.component";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 
 const StrikeDetailsView = () => {
   const params = useParams();
@@ -22,6 +23,7 @@ const StrikeDetailsView = () => {
   const query = useQueryClient();
 
   const [strikeId, setStrikeId] = useState<string>("");
+  const [acceptModal, setAcceptModal] = useState<boolean>(false);
 
   const { data, isPending } = useGetStrikes(
     undefined,
@@ -35,8 +37,6 @@ const StrikeDetailsView = () => {
 
   const strikeCount = data?.[0]?.meta?.total;
 
-  const { mutateAsync: acceptMutate, isPending: acceptPending } =
-    useAcceptRejectStrike(strikeId, "ACCEPT");
   const { mutateAsync: rejectMutate, isPending: rejectPending } =
     useAcceptRejectStrike(strikeId, "REJECT");
 
@@ -123,14 +123,10 @@ const StrikeDetailsView = () => {
                 <div className="w-full flex gap-x-3 justify-end mt-5">
                   <Button
                     onClick={() => {
-                      setStrikeId(strike.id);
-                      acceptMutate();
-                      query.invalidateQueries({ queryKey: ["all-strikes"] });
-                      router.push("strikes");
+                      setAcceptModal(true);
+                      setStrikeId(strike?.id);
                     }}
-                    text={
-                      acceptPending ? <LoadingSpinner size={20} /> : "Accept"
-                    }
+                    text="Accept"
                     className="bg-primary min-w-fit min-h-fit rounded-md text-white py-2 px-8 cursor-pointer"
                   />
                   <Button
@@ -138,7 +134,7 @@ const StrikeDetailsView = () => {
                       setStrikeId(strike.id);
                       rejectMutate();
                       query.invalidateQueries({ queryKey: ["all-strikes"] });
-                      router.push("strikes");
+                      router.push("/strikes");
                     }}
                     text={
                       rejectPending ? (
@@ -155,6 +151,12 @@ const StrikeDetailsView = () => {
           ))
         )}
       </div>
+      {acceptModal && (
+        <AcceptStrikeModal
+          onClose={() => setAcceptModal(false)}
+          strikeId={strikeId}
+        />
+      )}
     </div>
   );
 };
