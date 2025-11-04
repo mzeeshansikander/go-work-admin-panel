@@ -81,3 +81,47 @@ export interface StrikesData {
 export type StrikesResponse = [StrikesData | null];
 
 export type AcceptRejectResponse = [{ success: boolean } | null];
+
+export interface Company {
+  id: string;
+  name: string;
+  postedShifts: number;
+  subscriptionPlan: null;
+  logo: string;
+  location: string;
+  email: string;
+  rating: number;
+  reviewsCount: number;
+}
+
+export interface CompaniesData {
+  companies: Company[];
+  meta: {
+    skip: number;
+    take: number;
+    total: number;
+  };
+}
+
+export type CompaniesResponse = [CompaniesData | null];
+
+export interface User {
+  id: string;
+  profilePicture: string;
+  fullName: string;
+  email: string;
+  dob: string;
+  rating: number;
+  reviewsCount: number;
+}
+
+export interface UsersData {
+  users: User[];
+  meta: {
+    skip: number;
+    take: number;
+    total: number;
+  };
+}
+
+export type UsersResponse = [UsersData | null];

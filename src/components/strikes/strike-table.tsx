@@ -10,11 +10,12 @@ import {
 import { Strike, StrikesData } from "@/types/response";
 import { formatDate } from "@/utils/format-date-time-utils";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { MdArrowForward } from "react-icons/md";
+import LoadingSpinner from "../common/loading-spinner.component";
 import TableFoot from "../common/table-footer";
 import SearchInput from "../ui/search-input";
-import { useRouter } from "next/navigation";
-import LoaderOverlay from "../common/page-loader.component";
+import placeholder from "../../../public/assets/icons/individual_icon.png";
 
 interface StrikeTableProps {
   data: StrikesData;
@@ -52,7 +53,9 @@ const StrikesTable: React.FC<StrikeTableProps> = ({
         />
       </div>
       {isPending ? (
-        <LoaderOverlay />
+        <div className="w-full flex justify-center">
+          <LoadingSpinner size={20} color="#0071BC" />
+        </div>
       ) : data && data?.strikes?.length === 0 ? (
         <p className="text-center text-black text-lg font-semibold mt-10">
           NO DATA
@@ -88,7 +91,7 @@ const StrikesTable: React.FC<StrikeTableProps> = ({
                   >
                     <TableCell className="py-4 px-6 text-left flex gap-2">
                       <Image
-                        src={row?.companyLogo}
+                        src={row?.companyLogo || placeholder}
                         alt=""
                         className="w-6 h-6 rounded-full"
                         height={24}
@@ -101,7 +104,7 @@ const StrikesTable: React.FC<StrikeTableProps> = ({
                     </TableCell>
                     <TableCell className="py-4 px-6 text-left flex gap-2">
                       <Image
-                        src={row?.userProfile}
+                        src={row?.userProfile || placeholder}
                         alt=""
                         className="w-6 h-6 rounded-full"
                         height={24}

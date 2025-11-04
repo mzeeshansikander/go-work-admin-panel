@@ -61,4 +61,32 @@ export const URL = {
       return `${BASE_URL}/admin/strikes/${id}?${params.toString()}`;
     },
   },
+
+  companies: {
+    getCompanies: (skip: number, take: number, search?: string) => {
+      const params = new URLSearchParams();
+
+      if (search) params.append("search", search);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+
+      return `${BASE_URL}/admin/companies?${params.toString()}`;
+    },
+  },
+
+  users: {
+    getUsers: (skip: number, take: number, search?: string) => {
+      const params = new URLSearchParams();
+
+      if (search) params.append("search", search);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+
+      return `${BASE_URL}/admin/users?${params.toString()}`;
+    },
+  },
 };
