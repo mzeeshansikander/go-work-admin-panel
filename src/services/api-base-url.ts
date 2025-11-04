@@ -5,7 +5,7 @@ const IS_LIVE = true;
 const LOCAL_URL = "http://localhost:8000" as string;
 
 // Deployed URL
-const LIVE_URL = "https://staging-api-gowork.zenkoders.com" as string;
+const LIVE_URL = process.env.NEXT_PUBLIC_API_BASE_URL as string;
 
 export const BASE_URL = IS_LIVE ? LIVE_URL : LOCAL_URL;
 
