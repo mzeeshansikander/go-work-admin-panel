@@ -19,7 +19,7 @@ const StrikesView = () => {
   }, [searchTerm]);
 
   const { data, isPending } = useGetStrikes(
-    currentPage,
+    currentPage * rowsPerPage,
     rowsPerPage,
     currentTab,
     searchTerm

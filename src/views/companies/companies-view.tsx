@@ -15,7 +15,7 @@ const CompaniesView = () => {
   }, [searchTerm]);
 
   const { data, isPending } = useGetCompanies(
-    currentPage,
+    currentPage * rowsPerPage,
     rowsPerPage,
     searchTerm
   );

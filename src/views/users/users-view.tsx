@@ -14,7 +14,11 @@ const UsersView = () => {
     setCurrentPage(0);
   }, [searchTerm]);
 
-  const { data, isPending } = useGetUsers(currentPage, rowsPerPage, searchTerm);
+  const { data, isPending } = useGetUsers(
+    currentPage * rowsPerPage,
+    rowsPerPage,
+    searchTerm
+  );
 
   return (
     <div className="w-full md:px-10 px-5">
