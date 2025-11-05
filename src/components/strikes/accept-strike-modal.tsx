@@ -1,12 +1,10 @@
 "use client";
-import React from "react";
-import Image from "next/image";
-import Button from "../ui/button";
-import trash from "../../../public/assets/icons/trash.svg";
-import { useQueryClient } from "@tanstack/react-query";
 import { useAcceptRejectStrike } from "@/services/react-query/strikes/accept-reject-strike";
-import LoadingSpinner from "../common/loading-spinner.component";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import React from "react";
+import LoadingSpinner from "../common/loading-spinner.component";
+import Button from "../ui/button";
 
 interface AcceptModalProps {
   onClose: () => void;

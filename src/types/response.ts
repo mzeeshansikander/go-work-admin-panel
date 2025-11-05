@@ -223,38 +223,105 @@ export interface UserDetails {
   gender: string;
   dob: string;
   profilePicture: string;
-
   preferences: string[];
   workExperience: string[];
   otherWorkingExperience: string | null;
   professionalCertifications: string[];
   drivingLicense: string[];
-
   disability: boolean;
   languages: string[];
   uniformSize: string;
   shoesSize: number;
-
   nationality: string;
   nationalId: string;
   nationalInsuranceNumber: string;
-
   maritalStatus: string;
   educationLevel: string;
-
   unemployedSinceWhen: string | null;
   registeredAsUnemployed: boolean;
-
   bankAccountNo: string;
-
   nicFront: string;
   nicBack: string;
-
   rating: string;
   reviewsCount: number;
   strikesCount: number;
-
   reviews: ReviewsResponse;
 }
 
 export type UserDetailsResponse = [UserDetails | null];
+
+export interface Event {
+  id: string;
+  name: string;
+  companyName: string;
+  date: string;
+  postedShifts: number;
+  approvedCandidates: number;
+  slots: number;
+}
+
+export interface EventsData {
+  events: Event[];
+  meta: {
+    skip: number;
+    take: number;
+    total: number;
+  };
+}
+
+export type EventsDataResponse = [EventsData | null];
+
+export interface DropdownCompany {
+  id: string;
+  name: string;
+}
+
+export interface DropdownCompaniesData {
+  companies: DropdownCompany[];
+  meta: {
+    skip: number;
+    take: number;
+    total: number;
+  };
+}
+
+export type DropdownCompaniesDataResponse = [DropdownCompaniesData | null];
+
+interface EventDetails {
+  id: string;
+  name: string;
+  location: string;
+  image: string;
+  companyId: string;
+}
+
+export interface EventShift {
+  id: string;
+  name: string;
+  shiftTypeImage: string;
+  salaryPerHour: string;
+  totalShiftCost: string;
+  startsAt: string;
+  endsAt: string;
+  shiftDuration: string;
+  location: string;
+  startingIn: string;
+  pendingDocs: number;
+  confirmCandidates: number;
+  inQueue: number;
+  openings: number;
+}
+
+export interface EventDetailsData {
+  event: EventDetails;
+  eventShifts: {
+    shifts: EventShift[];
+    meta: {
+      skip: number;
+      take: number;
+      total: number;
+    };
+  };
+}
+
+export type EventDetailsResponse = [EventDetailsData | null];

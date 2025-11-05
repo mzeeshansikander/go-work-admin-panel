@@ -95,6 +95,17 @@ export const URL = {
       return `${BASE_URL}/admin/companies/${id}/ratings?${params.toString()}`;
     },
 
+    getCompaniesDropdown: (skip: number, take: number) => {
+      const params = new URLSearchParams();
+
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+
+      return `${BASE_URL}/admin/dropdown-companies?${params.toString()}`;
+    },
+
     getCompanyMembers: (
       id: string,
       skip: number,
@@ -149,6 +160,64 @@ export const URL = {
         params.append("take", take.toString());
 
       return `${BASE_URL}/admin/user/${id}?${params.toString()}`;
+    },
+
+    getUserContracts: (
+      skip: number,
+      take: number,
+      shiftId: string,
+      userId: string
+    ) => {
+      const params = new URLSearchParams();
+
+      if (shiftId) params.append("shiftId", shiftId);
+      if (userId) params.append("userId", userId);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+
+      return `${BASE_URL}/admin/user-contracts/${shiftId}/${userId}?${params.toString()}`;
+    },
+  },
+
+  events: {
+    getAllEvents: (
+      skip: number,
+      take: number,
+      type: string,
+      search?: string,
+      companyId?: string
+    ) => {
+      const params = new URLSearchParams();
+
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+      if (type) params.append("type", type);
+      if (search) params.append("search", search);
+      if (companyId) params.append("companyId", companyId);
+
+      return `${BASE_URL}/admin/events?${params.toString()}`;
+    },
+
+    getEventDetails: (
+      id: string,
+      skip: number,
+      take: number,
+      shiftType: string
+    ) => {
+      const params = new URLSearchParams();
+
+      if (id) params.append("id", id);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+      if (shiftType) params.append("shiftType", shiftType);
+
+      return `${BASE_URL}/admin/event/${id}?${params.toString()}`;
     },
   },
 };
