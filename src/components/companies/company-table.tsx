@@ -45,7 +45,7 @@ const CompaniesTable: React.FC<CompanyTableProps> = ({
       <div className="w-full mb-5">
         <SearchInput
           type="text"
-          placeholder="Search"
+          placeholder="Search Companies"
           className="w-full"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -113,7 +113,9 @@ const CompaniesTable: React.FC<CompanyTableProps> = ({
                       </div>
                     </TableCell>
                     <TableCell className="py-4 px-6 text-left">
-                      <span className="text-gray-600">{row?.postedShifts}</span>
+                      <span className="text-gray-600">
+                        {row?.postedShifts} Shifts
+                      </span>
                     </TableCell>
                     <TableCell className="py-4 px-6 text-left">
                       <span>{row?.subscriptionPlan || "N/A"}</span>

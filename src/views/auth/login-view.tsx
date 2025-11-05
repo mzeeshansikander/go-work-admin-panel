@@ -46,6 +46,7 @@ const LoginView = () => {
       </div>
       <form
         onSubmit={formik.handleSubmit}
+        noValidate
         className="flex flex-col gap-y-3 w-full mt-5 lg:ml-[200px] ml-20"
       >
         <Input

@@ -19,7 +19,7 @@ const ShiftsView = () => {
           onClick={() => {
             setFitler("ongoing_shifts");
           }}
-          className={`min-w-fit min-h-fit py-3 px-5 flex gap-3 ${
+          className={`min-w-fit min-h-fit py-3 px-8 flex gap-3 ${
             filter === "ongoing_shifts"
               ? "bg-[#6C38B2] text-white"
               : "bg-white text-[#6C38B2]"
@@ -34,7 +34,7 @@ const ShiftsView = () => {
           onClick={() => {
             setFitler("past_shifts");
           }}
-          className={`min-w-fit min-h-fit py-3 px-5 flex gap-3 ${
+          className={`min-w-fit min-h-fit py-3 px-10 flex gap-3 ${
             filter === "past_shifts"
               ? "bg-[#F14D4D] text-white"
               : "bg-white text-[#F14D4D]"

@@ -105,13 +105,15 @@ const InitialInfoComponent: FC<Props> = ({
       <div className="flex flex-col gap-3 md:basis-1/4 basis-1/2">
         <div className="flex gap-1">
           <Image src={street_icon} alt="" className="w-6 h-6" />
-          <div className="text-sm mt-1 text-[#626D6F]">Street</div>
+          <div className="text-sm mt-1 text-[#626D6F]">Location</div>
         </div>
         <div className="text-grey-100 text-md font-medium">{location}</div>
       </div>
 
       <div className="w-full mt-5 flex flex-col gap-y-2">
-        <p className="text-[#626D6F] text-[14px]">Company Details</p>
+        <p className="text-[#626D6F] text-[14px] font-semibold">
+          Company Details
+        </p>
         <p className="text-[#25292A] text-[16px]">{description}</p>
       </div>
     </div>

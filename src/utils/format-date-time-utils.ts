@@ -22,10 +22,9 @@ export function formatTime(utcDateTime: Date | string) {
  * @returns {string} Date in format "Tuesday, 24 June"
  */
 export function formatDate(utcDate: string): string {
-  const localDate = dayjs.utc(utcDate).tz(dayjs.tz.guess()); // Automatically detects local timezone
-  return localDate.format("dddd, D MMMM"); // e.g., "Saturday, 13 January"
+  const localDate = dayjs.utc(utcDate).tz(dayjs.tz.guess());
+  return localDate.format("MM/DD/YYYY"); // Outputs: 12/12/2001
 }
-
 /**
  * Formats a UTC date-time into a time string for input fields in local timezone
  * @param {string} utcDateTime - UTC ISO string

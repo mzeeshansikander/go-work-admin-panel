@@ -11,6 +11,7 @@ import { useState } from "react";
 import { MdArrowForward } from "react-icons/md";
 import Dropdown from "../common/dropdown";
 import SearchInput from "../ui/search-input";
+import { formatDate } from "@/utils/format-date-time-utils";
 
 const dropdownData = [
   { id: 1, name: "EventMasters Ltd." },
@@ -130,7 +131,7 @@ const ShiftsTable: React.FC = () => {
         <div className="w-full lg:w-[70%]">
           <SearchInput
             type="text"
-            placeholder="Search"
+            placeholder="Search Shift"
             className="w-full md:w-full"
           />
         </div>
@@ -174,7 +175,7 @@ const ShiftsTable: React.FC = () => {
                   Total Slots
                 </TableHead>
                 <TableHead className="py-4 px-6 text-white text-left">
-                  All Approved Candidates
+                  Approved Candidates
                 </TableHead>
                 <TableHead className="py-4 px-6 text-white text-left">
                   View Details
@@ -197,13 +198,13 @@ const ShiftsTable: React.FC = () => {
                     <span className="text-gray-600">{row.companyName}</span>
                   </TableCell>
                   <TableCell className="py-4 px-6 text-left">
-                    <span>{row.startDate}</span>
+                    <span>{formatDate(row.startDate)}</span>
                   </TableCell>
                   <TableCell className="py-4 px-6 text-left ml-8">
-                    <span>{row.totalSlots}</span>
+                    <span>{row.totalSlots} Slots</span>
                   </TableCell>
                   <TableCell className="py-4 px-6 text-left">
-                    <span>{row.approvedCandidates}</span>
+                    <span>{row.approvedCandidates} Candidates</span>
                   </TableCell>
                   <TableCell className="py-4 px-6 text-left">
                     <button className="text-gray-600 cursor-pointer transition-colors">
