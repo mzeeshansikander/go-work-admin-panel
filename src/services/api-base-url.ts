@@ -74,6 +74,44 @@ export const URL = {
 
       return `${BASE_URL}/admin/companies?${params.toString()}`;
     },
+
+    getCompanyDetails: (id: string) => {
+      const params = new URLSearchParams();
+
+      if (id) params.append("id", id);
+
+      return `${BASE_URL}/admin/company/${id}`;
+    },
+
+    getCompanyRatings: (id: string, skip: number, take: number) => {
+      const params = new URLSearchParams();
+
+      if (id) params.append("id", id);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+
+      return `${BASE_URL}/admin/companies/${id}/ratings?${params.toString()}`;
+    },
+
+    getCompanyMembers: (
+      id: string,
+      skip: number,
+      take: number,
+      search?: string
+    ) => {
+      const params = new URLSearchParams();
+
+      if (id) params.append("id", id);
+      if (search) params.append("search", search);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+
+      return `${BASE_URL}/admin/companies/${id}/team-crew-members?${params.toString()}`;
+    },
   },
 
   users: {
@@ -87,6 +125,18 @@ export const URL = {
         params.append("take", take.toString());
 
       return `${BASE_URL}/admin/users?${params.toString()}`;
+    },
+
+    getUserRatings: (id: string, skip: number, take: number) => {
+      const params = new URLSearchParams();
+
+      if (id) params.append("id", id);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+
+      return `${BASE_URL}/admin/users/${id}/ratings?${params.toString()}`;
     },
   },
 };

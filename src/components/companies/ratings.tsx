@@ -10,23 +10,16 @@ interface RatingData {
 interface RatingsProps {
   ratingData: RatingData;
   avgRating: string;
-  className?: string;
 }
 
-const Ratings: React.FC<RatingsProps> = ({
-  ratingData,
-  avgRating,
-  className = "",
-}) => {
+const Ratings: React.FC<RatingsProps> = ({ ratingData, avgRating }) => {
   const totalRatings = Object.values(ratingData).reduce(
     (sum, count) => sum + count,
     0
   );
 
   return (
-    <div
-      className={`w-full border border-grey-20 p-4 bg-white rounded-lg ${className}`}
-    >
+    <div className={`w-full border border-grey-20 p-4 bg-white rounded-lg`}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl text-primary font-bold">Ratings</h2>
         <div className="flex items-center gap-1">

@@ -3,63 +3,46 @@
 import Ratings from "@/components/companies/ratings";
 import backButton from "../../../public/assets/icons/back-arrow.png";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Reviews from "@/components/companies/reviews";
-
-// Dummy data
-const dummyResponse = {
-  avgRating: "4.8",
-  ratings: {
-    "5": 78,
-    "4": 15,
-    "3": 5,
-    "2": 1,
-    "1": 1,
-  },
-  reviews: {
-    reviews: [
-      {
-        id: 1,
-        stars: 5,
-        message: "Outstanding service! The team was professional and on time.",
-      },
-      {
-        id: 2,
-        stars: 4,
-        message: "Good experience overall. Minor delay in setup.",
-      },
-      {
-        id: 3,
-        stars: 5,
-        message: "Highly recommend. Best crew we've worked with.",
-      },
-      {
-        id: 4,
-        stars: 5,
-        message: "Flawless execution. Will book again for next event.",
-      },
-      {
-        id: 5,
-        stars: 3,
-        message: "Average. Communication could be improved.",
-      },
-      {
-        id: 6,
-        stars: 5,
-        message: "Perfect from start to finish. Thank you!",
-      },
-    ],
-    meta: { total: 100 },
-  },
-};
+import { useParams, useRouter } from "next/navigation";
+import { useGetCompanyReviews } from "@/services/react-query/companies/get-company-ratings";
+import LoaderOverlay from "@/components/common/page-loader.component";
 
 const ReviewsView = () => {
-  const response = dummyResponse;
+  const params = useParams();
+  const id = params.id as string;
+  const router = useRouter();
+
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCurrentPage(0);
+  }, [currentPage]);
+
+  const { data, isPending } = useGetCompanyReviews(
+    id,
+    currentPage * rowsPerPage,
+    rowsPerPage
+  );
+
+  const reviewData = data?.[0];
+
+  if (isPending) {
+    return <LoaderOverlay />;
+  }
 
   return (
-    <div className="container mx-auto">
+    <div className="w-full md:px-10 px-5">
       <div className="flex items-center gap-5 mb-6">
-        <div className="hover:bg-gray-100 mt-5 rounded-full cursor-pointer">
+        <div
+          onClick={() => {
+            router.back();
+          }}
+          className="mt-5 rounded-full cursor-pointer"
+        >
           <Image
             src={backButton}
             alt="back"
@@ -74,10 +57,17 @@ const ReviewsView = () => {
       </div>
 
       <div className="space-y-6">
-        <Ratings avgRating={response.avgRating} ratingData={response.ratings} />
+        <Ratings
+          avgRating={reviewData?.avgRating || " "}
+          ratingData={reviewData?.ratings || {}}
+        />
         <Reviews
-          reviews={response.reviews.reviews}
-          total={response.reviews.meta.total}
+          reviews={reviewData?.reviews?.reviews || []}
+          total={reviewData?.reviews?.meta?.total || 0}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          rowsPerPage={rowsPerPage}
+          setRowsPerPage={setRowsPerPage}
         />
       </div>
     </div>

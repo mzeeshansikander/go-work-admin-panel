@@ -23,16 +23,16 @@ interface Props {
 }
 
 const InitialInfoComponent: FC<Props> = ({
-  email = "N/A",
-  contact = "N/A",
-  industry = "N/A",
-  shift = 0,
-  country = "N/A",
-  city = "N/A",
-  street = "N/A",
-  zipCode = "N/A",
-  location = "N/A",
-  description = "No description provided.",
+  email,
+  contact,
+  industry,
+  shift,
+  country,
+  city,
+  street,
+  zipCode,
+  location,
+  description,
 }) => {
   return (
     <div className="flex flex-wrap my-5 gap-y-8 mt-20">
@@ -89,7 +89,9 @@ const InitialInfoComponent: FC<Props> = ({
           <Image src={city_icon} alt="" className="w-6 h-6" />
           <div className="text-sm mt-1 text-[#626D6F]">Street</div>
         </div>
-        <div className="text-grey-100 text-md font-medium">{street}</div>
+        <div className="text-grey-100 text-md font-medium">
+          {street || "N/A"}
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 md:basis-1/4 basis-1/2">

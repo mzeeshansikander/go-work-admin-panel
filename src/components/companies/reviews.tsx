@@ -1,22 +1,27 @@
 "use client";
 
+import { CompanyReview } from "@/types/response";
 import React from "react";
 import { FaStar } from "react-icons/fa6";
-
-interface Review {
-  id: number;
-  stars: number;
-  message: string;
-}
+import TableFoot from "../common/table-footer";
 
 interface ReviewsProps {
-  reviews: Review[];
+  reviews: CompanyReview[];
   total: number;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  rowsPerPage: number;
+  setRowsPerPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Reviews: React.FC<ReviewsProps> = ({ reviews, total }) => {
-  const hasMoreReviews = reviews.length < total;
-
+const Reviews: React.FC<ReviewsProps> = ({
+  reviews,
+  total,
+  setCurrentPage,
+  setRowsPerPage,
+  currentPage,
+  rowsPerPage,
+}) => {
   return (
     <div className="my-6">
       <div className="flex flex-wrap gap-8">
@@ -38,13 +43,16 @@ const Reviews: React.FC<ReviewsProps> = ({ reviews, total }) => {
         )}
       </div>
 
-      {hasMoreReviews && (
-        <div className="flex justify-center mt-8">
-          <button className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors">
-            Load More
-          </button>
-        </div>
-      )}
+      <div className="w-full flex justify-end mt-10">
+        <TableFoot
+          currentPage={currentPage}
+          rowsOption={[5, 10, 20]}
+          rowsPerPage={rowsPerPage}
+          setCurrentPage={setCurrentPage}
+          setRowsPerPage={setRowsPerPage}
+          total={total ?? 10}
+        />
+      </div>
     </div>
   );
 };

@@ -1,15 +1,52 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import backButton from "../../../public/assets/icons/back-arrow.png";
 import CompanyDetails from "@/components/companies/company-details";
 import TeamCrewTable from "@/components/companies/team-crew-table";
+import { useParams, useRouter } from "next/navigation";
+import { useGetCompanyDetails } from "@/services/react-query/companies/get-company-details";
+import LoaderOverlay from "@/components/common/page-loader.component";
+import { useGetCompanyMembers } from "@/services/react-query/companies/get-company-members";
+import { UsersData } from "@/types/response";
 
 const CompanyDetailsView = () => {
+  const params = useParams();
+  const id = params.id as string;
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCurrentPage(0);
+  }, [searchTerm]);
+
+  const { data: memberData, isPending: memberPending } = useGetCompanyMembers(
+    id,
+    currentPage * rowsPerPage,
+    rowsPerPage,
+    searchTerm
+  );
+
+  const { data, isPending } = useGetCompanyDetails(id);
+
+  const companyData = data?.[0];
+
+  if (isPending) {
+    return <LoaderOverlay />;
+  }
+
   return (
     <div className="w-full px-5 md:px-10">
       <div className="flex flex-row items-center gap-5 py-5">
-        <div className="cursor-pointer">
+        <div
+          onClick={() => {
+            router.push("/companies");
+          }}
+          className="cursor-pointer"
+        >
           <Image
             src={backButton}
             alt="back"
@@ -22,26 +59,36 @@ const CompanyDetailsView = () => {
       </div>
 
       <CompanyDetails
-        name="EventMasters Ltd."
-        profilePicture="/logos/eventmasters.png"
-        rating="4.9"
-        reviewCount={128}
-        email="contact@eventmasters.co.uk"
-        contact="+44 20 7946 0858"
-        industry="Event Staffing & Hospitality"
-        shift={128}
-        country="United Kingdom"
-        city="London"
-        street="12 Oxford Street"
-        zipCode="SW1A 1AA"
-        location="12 Oxford Street, London SW1A 1AA"
-        description="Leading provider of professional event staff across the UK. We supply trained stewards, security, and hospitality personnel for concerts, festivals, and corporate events. Trusted by over 500+ event organizers annually."
+        name={companyData?.name}
+        profilePicture={companyData?.logo}
+        rating={companyData?.rating}
+        reviewCount={companyData?.reviewsCount}
+        email={companyData?.email}
+        contact={companyData?.contactNumber}
+        industry={companyData?.industryType}
+        shift={companyData?.shiftsPosted}
+        country={companyData?.country}
+        city={companyData?.city}
+        street={companyData?.street}
+        zipCode={companyData?.zipCode}
+        location={companyData?.location}
+        description={companyData?.details}
+        id={companyData?.id}
       />
 
       <h1 className="text-[28px] font-semibold my-10">Team / Crew Members</h1>
 
       {/* Team Crew Table */}
-      <TeamCrewTable />
+      <TeamCrewTable
+        data={memberData?.[0] as UsersData}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        isPending={memberPending}
+      />
     </div>
   );
 };

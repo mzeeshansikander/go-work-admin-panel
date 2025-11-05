@@ -4,13 +4,21 @@ import backButton from "../../../public/assets/icons/back-arrow.png";
 import UserDetailsInfoComponent from "@/components/users/user-details-info";
 import RatingsReviewComponent from "@/components/users/ratings-reviews";
 import Button from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const UserDetailsView = () => {
+  const router = useRouter();
+
   return (
     <div className="w-full">
       <div className="w-full flex justify-between px-5 md:px-10">
         <div className="flex flex-row items-center gap-5 py-5">
-          <div className="cursor-pointer">
+          <div
+            onClick={() => {
+              router.push("/users");
+            }}
+            className="cursor-pointer"
+          >
             <Image
               src={backButton}
               alt="back"
