@@ -1,0 +1,77 @@
+"use client";
+
+import LoaderOverlay from "@/components/common/page-loader.component";
+import Ratings from "@/components/companies/ratings";
+import Reviews from "@/components/companies/reviews";
+import { useGetUserReviews } from "@/services/react-query/users/get-all-user-reviews";
+import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import backButton from "../../../public/assets/icons/back-arrow.png";
+
+const ReviewsView = () => {
+  const params = useParams();
+  const id = params.id as string;
+  const router = useRouter();
+
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCurrentPage(0);
+  }, [currentPage]);
+
+  const { data, isPending } = useGetUserReviews(
+    id,
+    currentPage * rowsPerPage,
+    rowsPerPage
+  );
+
+  const reviewData = data?.[0];
+
+  if (isPending) {
+    return <LoaderOverlay />;
+  }
+
+  return (
+    <div className="w-full md:px-10 px-5">
+      <div className="flex items-center gap-5 mb-6">
+        <div
+          onClick={() => {
+            router.back();
+          }}
+          className="mt-5 rounded-full cursor-pointer"
+        >
+          <Image
+            src={backButton}
+            alt="back"
+            width={34}
+            height={34}
+            className="w-[34px] h-[34px]"
+          />
+        </div>
+        <h1 className="text-2xl md:text-3xl mt-5 font-semibold">
+          All Ratings and Reviews
+        </h1>
+      </div>
+
+      <div className="space-y-6">
+        <Ratings
+          avgRating={reviewData?.avgRating || " "}
+          ratingData={reviewData?.ratings || {}}
+        />
+        <Reviews
+          reviews={reviewData?.reviews?.reviews || []}
+          total={reviewData?.reviews?.meta?.total || 0}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          rowsPerPage={rowsPerPage}
+          setRowsPerPage={setRowsPerPage}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default ReviewsView;

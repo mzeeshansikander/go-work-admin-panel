@@ -1,8 +1,7 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import InfoHeaderComponent from "./info-header";
 import InitialInfoComponent from "./initial-info";
 import OtherInfoComponent from "./other-info-component";
-import { formatDate } from "@/utils/format-date-time-utils";
 
 interface Props {
   firstName?: string;
@@ -10,18 +9,17 @@ interface Props {
   dateOfBirth?: string;
   languages?: string[];
   disability?: string;
-  drivingLicense?: string;
+  drivingLicense?: string[];
   uniformSize?: string;
   shoesSize?: number;
   preferences?: string[];
   workExperience?: string[];
   professionalCertifications?: string[];
-  rating?: number;
+  rating?: string;
   reviewCount?: number;
+  strikesCount?: number;
   profilePicture?: string;
   userId?: string;
-  chatId?: string;
-  jobStatus?: string;
   gender?: string;
   isCrewMember?: boolean;
   isTeamMember?: boolean;
@@ -30,22 +28,23 @@ interface Props {
 }
 
 const UserDetailsInfoComponent: FC<Props> = ({
-  firstName = "",
-  lastName = "",
-  dateOfBirth = "",
-  languages = [],
-  disability = "NO",
-  drivingLicense = "false",
-  uniformSize = "",
-  shoesSize = 0,
-  preferences = [],
-  workExperience = [],
-  professionalCertifications = [],
-  rating = 0,
-  reviewCount = 0,
-  profilePicture = "",
-  userId = "",
-  gender = "",
+  firstName,
+  lastName,
+  dateOfBirth,
+  languages,
+  disability,
+  drivingLicense,
+  uniformSize,
+  shoesSize,
+  preferences,
+  workExperience,
+  professionalCertifications,
+  rating,
+  reviewCount,
+  strikesCount,
+  profilePicture,
+  userId,
+  gender,
 }) => {
   return (
     <div className="border border-grey-10 p-4 rounded-md">
@@ -55,12 +54,13 @@ const UserDetailsInfoComponent: FC<Props> = ({
         reviewCount={reviewCount}
         profilePicture={profilePicture}
         userId={userId}
+        strikesCount={strikesCount}
       />
       <InitialInfoComponent
         firstName={firstName}
         lastName={lastName}
         email={lastName}
-        dateOfBirth={formatDate(dateOfBirth)}
+        dateOfBirth={dateOfBirth}
         languages={languages}
         disability={disability}
         drivingLicense={drivingLicense}

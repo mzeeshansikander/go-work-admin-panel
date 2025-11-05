@@ -197,3 +197,64 @@ export interface UserReviewsData {
 }
 
 export type UserReviewsResponse = [UserReviewsData | null];
+
+export interface Review {
+  id: string;
+  message: string;
+  stars: string;
+  reviewerName: string;
+  reviewerProfile: string;
+}
+
+export interface ReviewsResponse {
+  reviews: Review[];
+  meta: {
+    skip: number;
+    take: number;
+    total: number;
+  };
+}
+
+export interface UserDetails {
+  id: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  gender: string;
+  dob: string;
+  profilePicture: string;
+
+  preferences: string[];
+  workExperience: string[];
+  otherWorkingExperience: string | null;
+  professionalCertifications: string[];
+  drivingLicense: string[];
+
+  disability: boolean;
+  languages: string[];
+  uniformSize: string;
+  shoesSize: number;
+
+  nationality: string;
+  nationalId: string;
+  nationalInsuranceNumber: string;
+
+  maritalStatus: string;
+  educationLevel: string;
+
+  unemployedSinceWhen: string | null;
+  registeredAsUnemployed: boolean;
+
+  bankAccountNo: string;
+
+  nicFront: string;
+  nicBack: string;
+
+  rating: string;
+  reviewsCount: number;
+  strikesCount: number;
+
+  reviews: ReviewsResponse;
+}
+
+export type UserDetailsResponse = [UserDetails | null];

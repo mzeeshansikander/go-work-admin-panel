@@ -138,5 +138,17 @@ export const URL = {
 
       return `${BASE_URL}/admin/users/${id}/ratings?${params.toString()}`;
     },
+
+    getUserDetails: (id: string, skip: number, take: number) => {
+      const params = new URLSearchParams();
+
+      if (id) params.append("id", id);
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+
+      return `${BASE_URL}/admin/user/${id}?${params.toString()}`;
+    },
   },
 };

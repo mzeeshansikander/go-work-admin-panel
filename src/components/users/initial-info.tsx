@@ -6,7 +6,7 @@ interface UserProfile {
   dateOfBirth?: string;
   languages?: string[];
   disability?: string;
-  drivingLicense?: string;
+  drivingLicense?: string[];
   uniformSize?: string;
   shoesSize?: number;
   jobStatus?: string;
@@ -15,15 +15,15 @@ interface UserProfile {
 }
 
 const InitialInfoComponent: FC<UserProfile> = ({
-  dateOfBirth = "",
-  disability = "NO",
-  drivingLicense = "false",
-  firstName = "",
-  lastName = "",
-  languages = [],
-  uniformSize = "",
-  shoesSize = 0,
-  gender = "",
+  dateOfBirth,
+  disability,
+  drivingLicense,
+  firstName,
+  lastName,
+  languages,
+  uniformSize,
+  shoesSize,
+  gender,
 }) => {
   return (
     <div className="flex flex-wrap my-5 gap-y-8">
@@ -42,7 +42,7 @@ const InitialInfoComponent: FC<UserProfile> = ({
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Languages</div>
         <div className="text-grey-100 text-sm font-medium">
-          {languages.join(", ")}
+          {languages?.join(", ")}
         </div>
       </div>
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
@@ -62,7 +62,7 @@ const InitialInfoComponent: FC<UserProfile> = ({
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Driving License</div>
         <div className="text-grey-100 text-sm font-medium">
-          {drivingLicense === "true" ? "Yes" : "No"}
+          {drivingLicense?.join(", ")}
         </div>
       </div>
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">

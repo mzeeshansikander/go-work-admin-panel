@@ -118,7 +118,7 @@ const UsersTable: React.FC<UserTableProps> = ({
                     <TableCell className="py-4 px-6 text-left">
                       <button
                         onClick={() => {
-                          router.push(`/users/${row?.id}`);
+                          router.push(`/users/${row?.id}?fromShift=false`);
                         }}
                         className="text-gray-600 cursor-pointer transition-colors"
                       >
