@@ -45,7 +45,7 @@ const UsersTable: React.FC<UserTableProps> = ({
       <div className="w-full mb-5">
         <SearchInput
           type="text"
-          placeholder="Search"
+          placeholder="Search Users"
           className="w-full"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

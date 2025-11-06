@@ -220,4 +220,54 @@ export const URL = {
       return `${BASE_URL}/admin/event/${id}?${params.toString()}`;
     },
   },
+
+  shifts: {
+    getAllShifts: (
+      skip: number,
+      take: number,
+      type: string,
+      search?: string,
+      companyId?: string
+    ) => {
+      const params = new URLSearchParams();
+
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+      if (type) params.append("type", type);
+      if (search) params.append("search", search);
+      if (companyId) params.append("companyId", companyId);
+
+      return `${BASE_URL}/admin/shifts?${params.toString()}`;
+    },
+
+    getShiftDetails: (id: string) => {
+      const params = new URLSearchParams();
+
+      if (id) params.append("id", id.toString());
+
+      return `${BASE_URL}/admin/shift/${id}`;
+    },
+
+    getShiftUsers: (
+      id: string,
+      skip: number,
+      take: number,
+      userType: string,
+      search?: string
+    ) => {
+      const params = new URLSearchParams();
+
+      if (skip !== undefined && skip !== null)
+        params.append("skip", skip.toString());
+      if (take !== undefined && take !== null)
+        params.append("take", take.toString());
+      if (userType) params.append("userType", userType);
+      if (search) params.append("search", search);
+      if (id) params.append("id", id);
+
+      return `${BASE_URL}/admin/shift/${id}/users?${params.toString()}`;
+    },
+  },
 };

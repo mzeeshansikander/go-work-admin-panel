@@ -67,6 +67,7 @@ export interface Strike {
   isApproved: string;
   companyLogo: string;
   userProfile: string;
+  strikesCount: number;
 }
 
 export interface StrikesData {
@@ -325,3 +326,77 @@ export interface EventDetailsData {
 }
 
 export type EventDetailsResponse = [EventDetailsData | null];
+
+export interface Shift {
+  id: string;
+  name: string;
+  companyName: string;
+  date: string;
+  eventName: string;
+  approvedCandidates: number;
+  slots: number;
+}
+
+export interface ShiftsData {
+  shifts: Shift[];
+  meta: {
+    skip: number;
+    take: number;
+    total: number;
+  };
+}
+
+export type ShiftsDataResponse = [ShiftsData | null];
+
+export interface ShiftDetails {
+  id: string;
+  name: string;
+  startDateTime: string;
+  endDateTime: string;
+  noOfSlots: string;
+  driversLicense: string;
+  uniformRequirement: string;
+  otherUniformRequirement: string | null;
+  shiftBenefits: string[];
+  salaryPerHour: string;
+  shiftDuration: string;
+  language: string[];
+  shiftTasks: string[];
+  shiftTypeImage: string;
+  totalShiftCost: string;
+  shiftType: string;
+  otherShiftType: string | null;
+  event: EventDetails;
+  availableSlots: number;
+  pendingUsers: number;
+  pendingContractUsers: number;
+  approvedUsers: number;
+}
+
+export type ShiftDetailsResponse = [ShiftDetails | null];
+
+export interface Contract {
+  id: string;
+  companyContract: {
+    key: string;
+    url: string;
+  };
+  userContract: {
+    key: string;
+    url: string;
+  };
+  contractType: string;
+  isSignatureRequired: boolean;
+  has_user_uploaded: boolean;
+}
+
+export interface ContractsData {
+  contracts: Contract[];
+  meta: {
+    skip: number;
+    take: number;
+    total: number;
+  };
+}
+
+export type ContractssResponse = [ContractsData | null];

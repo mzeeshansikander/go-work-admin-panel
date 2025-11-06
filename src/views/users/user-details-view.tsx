@@ -14,6 +14,7 @@ const UserDetailsView = () => {
   const id = params.id as string;
 
   const fromShift = useSearchParams().get("fromShift");
+  const shiftId = useSearchParams().get("shiftId");
   const router = useRouter();
 
   const { data, isPending } = useGetUserDetails(id, 0, 6);
@@ -30,7 +31,9 @@ const UserDetailsView = () => {
         <div className="flex flex-row items-center gap-5 py-5">
           <div
             onClick={() => {
-              router.push("/users");
+              fromShift === "true"
+                ? router.push(`/shifts/${shiftId}`)
+                : router.push("/users");
             }}
             className="cursor-pointer"
           >
@@ -46,8 +49,11 @@ const UserDetailsView = () => {
         </div>
         {fromShift === "true" && (
           <Button
+            onClick={() =>
+              router.push(`/users/${id}/contract?shiftId=${shiftId}`)
+            }
             text={"View Contract Details"}
-            className="bg-primary rounded-lg text-white py-2 px-3 mt-4"
+            className="bg-primary rounded-lg text-white py-2 px-3 mt-4 cursor-pointer"
           />
         )}
       </div>

@@ -4,33 +4,34 @@ import React from "react";
 import ShiftInformationComponent from "./shift-information";
 import ShiftTasksComponent from "./shift-takes";
 
-const shift = {
-  name: "Morning Setup Crew",
-  totalShiftCost: "740.00",
-  salaryPerHour: "18.50",
-  startDateTime: "2025-08-15T06:00:00Z",
-  endDateTime: "2025-08-15T12:00:00Z",
-  availableSlots: 40,
-  location: "Main Stage Area",
-  shiftType: "Setup",
-  pendingUsers: 5,
-  pendingContractUsers: 2,
-  approvedUsers: 38,
-  shiftTasks: [
-    "Set up stage barriers",
-    "Install lighting rigs",
-    "Position speaker towers",
-  ],
-  shiftBenefits: [
-    { field: "Free Meals", value: "Breakfast & Lunch" },
-    { field: "Transport", value: "Shuttle from city center" },
-  ],
-  uniformRequirement: "BLACK_TSHIRT_AND_JEANS",
-  driversLicense: "Not Required",
-  language: ["English", "Spanish"],
-};
+interface ShiftDetailsTabProps {
+  shift: {
+    id: string;
+    name: string;
+    startDateTime: string;
+    endDateTime: string;
+    noOfSlots: string;
+    availableSlots: number;
+    shiftType: string;
+    shiftTypeImage?: string;
+    salaryPerHour: string;
+    totalShiftCost: string;
+    driversLicense: string;
+    uniformRequirement: string;
+    otherUniformRequirement: string | null;
+    language: string[];
+    shiftTasks: string[];
+    shiftBenefits: { field: string; value: string }[];
+    pendingUsers: number;
+    pendingContractUsers: number;
+    approvedUsers: number;
+    event: {
+      location: string;
+    };
+  };
+}
 
-const ShiftDetailsTab = () => {
+const ShiftDetailsTab: React.FC<ShiftDetailsTabProps> = ({ shift }) => {
   const startTime = formatTime(shift.startDateTime);
   const endTime = formatTime(shift.endDateTime);
   const duration = calculateDuration(shift.startDateTime, shift.endDateTime);
@@ -40,10 +41,10 @@ const ShiftDetailsTab = () => {
       field: "Uniform Requirement",
       value:
         shift.uniformRequirement
-          .replace(/_/g, " ")
-          .replace(/\b\w/g, (c) => c.toUpperCase()) || "",
+          ?.replace(/_/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase()) || "Not specified",
     },
-    { field: "Driving License", value: shift.driversLicense },
+    { field: "Driving License", value: shift.driversLicense || "Not required" },
     { field: "Language", value: shift.language.join(", ") },
   ];
 
@@ -59,7 +60,7 @@ const ShiftDetailsTab = () => {
         time={`${startTime} - ${endTime}`}
         duration={duration}
         noOfSlots={`Slots available: ${shift.availableSlots}`}
-        location={shift.location}
+        location={shift.event.location}
         shiftType={shift.shiftType}
         pendingUsers={String(shift.pendingUsers)}
         pendingContract={String(shift.pendingContractUsers)}

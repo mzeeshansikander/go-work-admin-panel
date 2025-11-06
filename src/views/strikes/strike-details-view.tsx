@@ -14,6 +14,7 @@ import backButton from "../../../public/assets/icons/back-arrow.png";
 import redStrike from "../../../public/assets/icons/red-strike-icon.svg";
 import strikeIcon from "../../../public/assets/icons/strike_icon.png";
 import whiteStrike from "../../../public/assets/icons/white-strike-icon.svg";
+import toast from "react-hot-toast";
 
 const StrikeDetailsView = () => {
   const params = useParams();
@@ -35,10 +36,32 @@ const StrikeDetailsView = () => {
 
   const strikes = data?.[0]?.strikes;
 
-  const strikeCount = data?.[0]?.meta?.total;
+  const strikeCount = data?.[0]?.strikes?.[0]?.strikesCount;
+
+  const { mutateAsync: acceptMutate, isPending: acceptPending } =
+    useAcceptRejectStrike(strikeId, "ACCEPT");
 
   const { mutateAsync: rejectMutate, isPending: rejectPending } =
     useAcceptRejectStrike(strikeId, "REJECT");
+
+  const acceptStrike = async (id: string) => {
+    if (strikeCount === 3) {
+      toast.error("This user has already been banned from this platform.");
+    }
+    strikeCount === 2
+      ? () => {
+          setAcceptModal(true);
+          setStrikeId(id);
+        }
+      : () => {
+          setStrikeId(id);
+          acceptMutate();
+          query.invalidateQueries({
+            queryKey: ["all-strikes"],
+          });
+          router.push("/strikes");
+        };
+  };
 
   return (
     <div className="w-full md:px-10 px-5">
@@ -108,7 +131,7 @@ const StrikeDetailsView = () => {
                       );
                     })}
                   </div>
-                  <p className="text-black mt-0.5">{index + 1}/3</p>
+                  <p className="text-black mt-0.5">{strikeCount}/3</p>
                 </div>
               </div>
 
@@ -122,11 +145,14 @@ const StrikeDetailsView = () => {
               {!strike?.isApproved && (
                 <div className="w-full flex gap-x-3 justify-end mt-5">
                   <Button
-                    onClick={() => {
-                      setAcceptModal(true);
-                      setStrikeId(strike?.id);
-                    }}
-                    text="Accept"
+                    onClick={() => acceptStrike(strike.id)}
+                    text={
+                      acceptPending ? (
+                        <LoadingSpinner size={20} color="#F14D4D" />
+                      ) : (
+                        "Accept"
+                      )
+                    }
                     className="bg-primary min-w-fit min-h-fit rounded-md text-white py-2 px-8 cursor-pointer"
                   />
                   <Button
