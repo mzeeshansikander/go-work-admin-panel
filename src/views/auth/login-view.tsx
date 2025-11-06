@@ -28,7 +28,7 @@ const LoginView = () => {
           if (res[0] !== null) {
             router.push("/dashboard");
             setCookie("accessToken", res?.[0]?.token);
-            toast.success("Login Sucessful.");
+            toast.success("Login Sucessfull");
           } else {
             toast.error("Invalid credentials.");
           }

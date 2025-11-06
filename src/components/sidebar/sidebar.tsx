@@ -8,6 +8,7 @@ import { IoIosClose } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { deleteCookie } from "cookies-next";
 import { tabs } from "@/constants/sidebar";
+import toast from "react-hot-toast";
 
 interface TabProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ const Sidebar = ({ isOpen, setIsOPen }: TabProps) => {
 
   const handleLogout = () => {
     deleteCookie("accessToken");
+    toast.success("Logged out successfully");
     router.push("/login");
     router.refresh();
   };
