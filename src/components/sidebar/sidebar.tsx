@@ -20,8 +20,8 @@ const Sidebar = ({ isOpen, setIsOPen }: TabProps) => {
 
   const handleLogout = () => {
     deleteCookie("accessToken");
-    toast.success("Logged out successfully");
     router.push("/login");
+    toast.success("Logged out successfully");
     router.refresh();
   };
 
