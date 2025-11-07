@@ -133,12 +133,12 @@ const EventsTable: React.FC<EventTableProps> = ({
                       <span className="">{row?.companyName}</span>
                     </TableCell>
                     <TableCell className="py-4 px-6 text-left">
+                      <span>{row?.slots} Slots</span>
+                    </TableCell>
+                    <TableCell className="py-4 px-6 text-left">
                       <span className="text-gray-600">
                         {row?.postedShifts} Shifts
                       </span>
-                    </TableCell>
-                    <TableCell className="py-4 px-6 text-left">
-                      <span>{row?.slots} Slots</span>
                     </TableCell>
                     <TableCell className="py-4 px-6 text-left ml-8">
                       <span>{row?.approvedCandidates} Candidates</span>

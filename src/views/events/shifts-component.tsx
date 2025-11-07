@@ -159,7 +159,7 @@ const ShiftsComponent: React.FC<ShiftProps> = ({
                 onClick={() => {
                   router.push(`/shifts/${shift?.id}`);
                 }}
-                className="w-full mx-auto text-center justify-center flex text-white bg-primary px-3 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+                className="w-full mx-auto text-center justify-center flex text-white bg-primary px-3 py-2 rounded-lg hover:bg-primary/90 transition-colors cursor-pointer"
               >
                 View Details
               </button>

@@ -1,3 +1,4 @@
+import { formatDateForDob } from "@/utils/format-date-time-utils";
 import React, { FC } from "react";
 
 interface UserProfile {
@@ -12,6 +13,7 @@ interface UserProfile {
   jobStatus?: string;
   gender?: string;
   email?: string;
+  contactNumber?: string;
 }
 
 const InitialInfoComponent: FC<UserProfile> = ({
@@ -24,6 +26,8 @@ const InitialInfoComponent: FC<UserProfile> = ({
   uniformSize,
   shoesSize,
   gender,
+  email,
+  contactNumber,
 }) => {
   return (
     <div className="flex flex-wrap my-5 gap-y-8">
@@ -37,7 +41,9 @@ const InitialInfoComponent: FC<UserProfile> = ({
       </div>
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Date of Birth</div>
-        <div className="text-grey-100 text-sm font-medium">{dateOfBirth}</div>
+        <div className="text-grey-100 text-sm font-medium">
+          {formatDateForDob(dateOfBirth || "")}
+        </div>
       </div>
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Languages</div>
@@ -47,17 +53,17 @@ const InitialInfoComponent: FC<UserProfile> = ({
       </div>
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Email</div>
-        <div className="text-grey-100 text-sm font-medium">
-          Jhondoe@gmail.com
-        </div>
+        <div className="text-grey-100 text-sm font-medium">{email}</div>
       </div>
-      <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
+      {/* <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Contact Number</div>
-        <div className="text-grey-100 text-sm font-medium">+34 612 345 678</div>
-      </div>
+        <div className="text-grey-100 text-sm font-medium">{contactNumber}</div>
+      </div> */}
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Disability</div>
-        <div className="text-grey-100 text-sm font-medium">{disability}</div>
+        <div className="text-grey-100 text-sm font-medium">
+          {disability?.toUpperCase()}
+        </div>
       </div>
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Driving License</div>

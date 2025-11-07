@@ -68,3 +68,44 @@ export function getUtcDate(dateString: string | null): string | null {
   if (!localDate.isValid()) return null;
   return localDate.utc().startOf("day").toISOString();
 }
+
+export const formatDateForDob = (dateString: string): string => {
+  try {
+    // Parse the date string
+    const date = new Date(dateString);
+
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      throw new Error("Invalid date");
+    }
+
+    // Define day and month names
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    // Get date components
+    const dayName = days[date.getDay()];
+    const monthName = months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    // Return formatted string
+    return `${dayName}, ${monthName} ${day}, ${year}`;
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return dateString; // Return original string if parsing fails
+  }
+};

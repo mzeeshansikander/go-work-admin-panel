@@ -59,7 +59,7 @@ const InfoHeaderComponent: FC<Props> = ({
                   key={index}
                   src={isRed ? redStrike : whiteStrike}
                   alt={isRed ? "Active strike" : "Inactive strike"}
-                  className="w-6 h-6"
+                  className="w-5 h-5 mt-1"
                 />
               );
             })}
