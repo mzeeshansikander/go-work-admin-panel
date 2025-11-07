@@ -95,13 +95,14 @@ export const URL = {
       return `${BASE_URL}/admin/companies/${id}/ratings?${params.toString()}`;
     },
 
-    getCompaniesDropdown: (skip: number, take: number) => {
+    getCompaniesDropdown: (skip: number, take: number, search: string) => {
       const params = new URLSearchParams();
 
       if (skip !== undefined && skip !== null)
         params.append("skip", skip.toString());
       if (take !== undefined && take !== null)
         params.append("take", take.toString());
+      if (search) params.append("search", search);
 
       return `${BASE_URL}/admin/dropdown-companies?${params.toString()}`;
     },

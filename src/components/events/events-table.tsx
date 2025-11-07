@@ -33,6 +33,8 @@ interface EventTableProps {
   take: number;
   setTake: React.Dispatch<React.SetStateAction<number>>;
   companyPending: boolean;
+  companySearchTerm: string;
+  setCompanySearchTerm: (searchTerm: string) => void;
 }
 
 const EventsTable: React.FC<EventTableProps> = ({
@@ -49,6 +51,8 @@ const EventsTable: React.FC<EventTableProps> = ({
   setSkip,
   companyPending,
   companyData,
+  companySearchTerm,
+  setCompanySearchTerm,
 }) => {
   const router = useRouter();
 
@@ -79,6 +83,9 @@ const EventsTable: React.FC<EventTableProps> = ({
             placeholder="Select Company"
             onLoadMore={handleLoadMore}
             loading={companyPending}
+            companySearchTerm={companySearchTerm}
+            setCompanySearchTerm={setCompanySearchTerm}
+            setSkip={setSkip}
           />
         </div>
       </div>

@@ -35,6 +35,8 @@ interface ShiftTableProps {
   setTake: React.Dispatch<React.SetStateAction<number>>;
   companyPending: boolean;
   tab: string;
+  companySearchTerm: string;
+  setCompanySearchTerm: (searchTerm: string) => void;
 }
 const ShiftsTable: React.FC<ShiftTableProps> = ({
   data,
@@ -51,6 +53,8 @@ const ShiftsTable: React.FC<ShiftTableProps> = ({
   companyPending,
   companyData,
   tab,
+  setCompanySearchTerm,
+  companySearchTerm,
 }) => {
   const router = useRouter();
 
@@ -80,6 +84,9 @@ const ShiftsTable: React.FC<ShiftTableProps> = ({
             placeholder="Select Company"
             onLoadMore={handleLoadMore}
             loading={companyPending}
+            companySearchTerm={companySearchTerm}
+            setCompanySearchTerm={setCompanySearchTerm}
+            setSkip={setSkip}
           />
         </div>
       </div>

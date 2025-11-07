@@ -5,18 +5,19 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export const useGetCompaniesDropdown = (
   skip: number,
-  take: number
+  take: number,
+  search: string
 ): UseQueryResult<DropdownCompaniesDataResponse, Error> => {
   const useGetCompaniesDropdownFn =
     async (): Promise<DropdownCompaniesDataResponse> => {
       const response = await GET(
-        URL.companies.getCompaniesDropdown(skip, take)
+        URL.companies.getCompaniesDropdown(skip, take, search)
       );
       return response as DropdownCompaniesDataResponse;
     };
 
   return useQuery({
     queryFn: useGetCompaniesDropdownFn,
-    queryKey: ["companies-dropdown", { skip, take }],
+    queryKey: ["companies-dropdown", { skip, take, search }],
   });
 };

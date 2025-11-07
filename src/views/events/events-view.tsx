@@ -15,6 +15,7 @@ const EventsView = () => {
   const [skip, setSkip] = useState<number>(0);
   const [take, setTake] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [companySearchTerm, setCompanySearchTerm] = useState<string>("");
   const [companyId, setCompanyId] = useState<string>("");
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const EventsView = () => {
   );
 
   const { data: companyData, isPending: companyPending } =
-    useGetCompaniesDropdown(skip * take, take);
+    useGetCompaniesDropdown(skip * take, take, companySearchTerm);
 
   return (
     <div className="w-full md:px-10 px-5">
@@ -100,6 +101,8 @@ const EventsView = () => {
         setTake={setTake}
         companyPending={companyPending}
         companyData={companyData?.[0] as DropdownCompaniesData}
+        companySearchTerm={companySearchTerm}
+        setCompanySearchTerm={setCompanySearchTerm}
       />
     </div>
   );
