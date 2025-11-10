@@ -36,7 +36,10 @@ const StrikeDetailsView = () => {
 
   const strikes = data?.[0]?.strikes;
 
+  console.log(strikes);
+
   const strikeCount = data?.[0]?.strikes?.[0]?.strikesCount;
+  console.log(strikeCount, "strikeCount");
 
   const { mutateAsync: acceptMutate, isPending: acceptPending } =
     useAcceptRejectStrike(strikeId, "ACCEPT");
@@ -47,20 +50,18 @@ const StrikeDetailsView = () => {
   const acceptStrike = async (id: string) => {
     if (strikeCount === 3) {
       toast.error("This user has already been banned from this platform.");
+      return;
     }
-    strikeCount === 2
-      ? () => {
-          setAcceptModal(true);
-          setStrikeId(id);
-        }
-      : () => {
-          setStrikeId(id);
-          acceptMutate();
-          query.invalidateQueries({
-            queryKey: ["all-strikes"],
-          });
-          router.push("/strikes");
-        };
+
+    if (strikeCount === 2) {
+      setStrikeId(id);
+      setAcceptModal(true);
+    } else {
+      setStrikeId(id);
+      await acceptMutate();
+      query.invalidateQueries({ queryKey: ["all-strikes"] });
+      router.push("/strikes");
+    }
   };
 
   return (
@@ -145,7 +146,7 @@ const StrikeDetailsView = () => {
               {!strike?.isApproved && (
                 <div className="w-full flex gap-x-3 justify-end mt-5">
                   <Button
-                    onClick={() => acceptStrike(strike.id)}
+                    onClick={() => acceptStrike(strike?.id)}
                     text={
                       acceptPending ? (
                         <LoadingSpinner size={20} color="#F14D4D" />
