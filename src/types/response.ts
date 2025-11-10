@@ -221,6 +221,8 @@ export interface UserDetails {
   firstName: string;
   lastName: string;
   fullName: string;
+  email: string;
+  contactNumber: string;
   gender: string;
   dob: string;
   profilePicture: string;

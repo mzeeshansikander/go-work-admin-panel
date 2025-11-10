@@ -55,10 +55,12 @@ const InitialInfoComponent: FC<UserProfile> = ({
         <div className="text-sm text-grey-60">Email</div>
         <div className="text-grey-100 text-sm font-medium">{email}</div>
       </div>
-      {/* <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
+      <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Contact Number</div>
-        <div className="text-grey-100 text-sm font-medium">{contactNumber}</div>
-      </div> */}
+        <div className="text-grey-100 text-sm font-medium">
+          {contactNumber || "N/A"}
+        </div>
+      </div>
       <div className="flex flex-col gap-3 basis-1/2 md:basis-1/4">
         <div className="text-sm text-grey-60">Disability</div>
         <div className="text-grey-100 text-sm font-medium">

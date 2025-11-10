@@ -77,6 +77,8 @@ const UserDetailsView = () => {
           strikesCount={userData?.strikesCount}
           userId={userData?.id}
           gender={userData?.gender}
+          email={userData?.email}
+          contactNumber={userData?.contactNumber}
         />
 
         <RatingsReviewComponent

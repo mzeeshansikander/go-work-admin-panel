@@ -6,6 +6,8 @@ import OtherInfoComponent from "./other-info-component";
 interface Props {
   firstName?: string;
   lastName?: string;
+  email?: string;
+  contactNumber?: string;
   dateOfBirth?: string;
   languages?: string[];
   disability?: string;
@@ -45,6 +47,8 @@ const UserDetailsInfoComponent: FC<Props> = ({
   profilePicture,
   userId,
   gender,
+  email,
+  contactNumber,
 }) => {
   return (
     <div className="border border-grey-10 p-4 rounded-md">
@@ -59,7 +63,7 @@ const UserDetailsInfoComponent: FC<Props> = ({
       <InitialInfoComponent
         firstName={firstName}
         lastName={lastName}
-        email={lastName}
+        email={email}
         dateOfBirth={dateOfBirth}
         languages={languages}
         disability={disability}
@@ -67,6 +71,7 @@ const UserDetailsInfoComponent: FC<Props> = ({
         uniformSize={uniformSize}
         shoesSize={shoesSize}
         gender={gender}
+        contactNumber={contactNumber}
       />
       <OtherInfoComponent title="Preferences" info_arr={preferences} />
       <OtherInfoComponent title="Work Experience" info_arr={workExperience} />
