@@ -18,6 +18,8 @@ interface Props {
   rating?: string;
   reviewCount?: number;
   id?: string;
+  maxTeamSize?: number;
+  externalMembersQuota?: number;
 }
 
 const CompanyDetails: FC<Props> = ({
@@ -36,6 +38,8 @@ const CompanyDetails: FC<Props> = ({
   location,
   description,
   id,
+  externalMembersQuota,
+  maxTeamSize,
 }) => {
   return (
     <div className="border border-grey-10 p-6 rounded-md">
@@ -45,6 +49,8 @@ const CompanyDetails: FC<Props> = ({
         rating={rating}
         reviewCount={reviewCount}
         id={id}
+        externalMembersQuota={externalMembersQuota}
+        maxTeamSize={maxTeamSize}
       />
       <InitialInfoComponent
         email={email}

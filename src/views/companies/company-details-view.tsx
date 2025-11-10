@@ -9,6 +9,8 @@ import { useGetCompanyDetails } from "@/services/react-query/companies/get-compa
 import LoaderOverlay from "@/components/common/page-loader.component";
 import { useGetCompanyMembers } from "@/services/react-query/companies/get-company-members";
 import { UsersData } from "@/types/response";
+import Button from "@/components/ui/button";
+import IncreaseMembersModal from "@/components/companies/increase-members-modal";
 
 const CompanyDetailsView = () => {
   const params = useParams();
@@ -17,6 +19,7 @@ const CompanyDetailsView = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [increaseModal, setIncreaseModal] = useState<boolean>(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -40,22 +43,29 @@ const CompanyDetailsView = () => {
 
   return (
     <div className="w-full px-5 md:px-10">
-      <div className="flex flex-row items-center gap-5 py-5">
-        <div
-          onClick={() => {
-            router.push("/companies");
-          }}
-          className="cursor-pointer"
-        >
-          <Image
-            src={backButton}
-            alt="back"
-            width={34}
-            height={34}
-            className="w-[34px] h-[34px]"
-          />
+      <div className="w-full flex justify-between">
+        <div className="flex flex-row items-center gap-5 py-5">
+          <div
+            onClick={() => {
+              router.push("/companies");
+            }}
+            className="cursor-pointer"
+          >
+            <Image
+              src={backButton}
+              alt="back"
+              width={34}
+              height={34}
+              className="w-[34px] h-[34px]"
+            />
+          </div>
+          <h1 className="text-[28px] font-semibold">Company Details</h1>
         </div>
-        <h1 className="text-[28px] font-semibold">Company Details</h1>
+        <Button
+          onClick={() => setIncreaseModal(true)}
+          text={"Increase External Count"}
+          className="bg-primary rounded-lg text-white py-2 px-3 mt-4 cursor-pointer"
+        />
       </div>
 
       <CompanyDetails
@@ -74,6 +84,8 @@ const CompanyDetailsView = () => {
         location={companyData?.location}
         description={companyData?.details}
         id={companyData?.id}
+        externalMembersQuota={companyData?.externalMembersQuota}
+        maxTeamSize={companyData?.teamSizeQuota}
       />
 
       <h1 className="text-[28px] font-semibold my-10">Team / Crew Members</h1>
@@ -89,6 +101,12 @@ const CompanyDetailsView = () => {
         setSearchTerm={setSearchTerm}
         isPending={memberPending}
       />
+      {increaseModal && (
+        <IncreaseMembersModal
+          onClose={() => setIncreaseModal(false)}
+          companyId={companyData?.id || ""}
+        />
+      )}
     </div>
   );
 };

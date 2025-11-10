@@ -19,6 +19,12 @@ export interface LoginResponse {
 
 export type LoginApiResponse = [LoginResponse | null];
 
+export interface IncreaseResponse {
+  message: string;
+}
+
+export type IncreaseApiResponse = [IncreaseResponse | null];
+
 export interface SendOtpResponse {
   success: boolean;
   message: string;
@@ -146,6 +152,8 @@ export interface CompanyDetails {
   details: string;
   rating: string;
   reviewsCount: number;
+  teamSizeQuota: number;
+  externalMembersQuota: number;
 }
 
 export type CompanyDetailsResponse = [CompanyDetails | null];

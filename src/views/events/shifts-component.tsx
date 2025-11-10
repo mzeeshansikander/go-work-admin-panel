@@ -7,7 +7,7 @@ import event_cover from "../../../public/assets/images/event_cover.png";
 import { EventShift } from "@/types/response";
 import LoadingSpinner from "@/components/common/loading-spinner.component";
 import { useRouter } from "next/navigation";
-import { formatDate } from "@/utils/format-date-time-utils";
+import { formatDate, formatTime } from "@/utils/format-date-time-utils";
 
 export interface ShiftProps {
   shifts: EventShift[];
@@ -123,13 +123,18 @@ const ShiftsComponent: React.FC<ShiftProps> = ({
                 </span>
               </div>
 
-              <div className="flex justify-between text-md text-grey-80">
-                <div className="flex items-center gap-2">
-                  <Image src={date_icon} width={20} height={20} alt="date" />
-                  {formatDate(shift?.startsAt)}
+              <div className="w-full justify-between mt-1 flex flex-row">
+                <div className="text-md font-semibold text-grey-80">
+                  {" "}
+                  <div className="flex items-center gap-2">
+                    <Image src={date_icon} width={20} height={20} alt="date" />
+                    {formatDate(shift?.startsAt)}
+                  </div>
                 </div>
-                <div className="text-right text-sm font-medium">
-                  {shift?.shiftDuration}
+                <div className="text-md px-1 font-semibold text-grey-80">
+                  {`${formatTime(shift?.startsAt)} - ${formatTime(
+                    shift?.endsAt
+                  )}, ${shift?.shiftDuration}h`}
                 </div>
               </div>
 

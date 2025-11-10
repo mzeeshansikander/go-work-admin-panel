@@ -124,6 +124,14 @@ export const URL = {
 
       return `${BASE_URL}/admin/companies/${id}/team-crew-members?${params.toString()}`;
     },
+
+    increaseCompanyExternalCount: (id: string) => {
+      const params = new URLSearchParams();
+
+      if (id) params.append("id", id);
+
+      return `${BASE_URL}/admin/company/${id}/external-candidate/top-up`;
+    },
   },
 
   users: {
